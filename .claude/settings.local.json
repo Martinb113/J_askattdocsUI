@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(source:*)",
+      "Bash(./venv/Scripts/activate.bat)",
+      "Bash(find:*)",
+      "Bash(python -m pytest -v)",
+      "Bash(timeout 30s python -m pytest:*)",
+      "Bash(python -m pytest -v --tb=short)",
+      "Bash(python -m pytest --tb=no -q)",
+      "Bash(mv:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run test:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:testdriven.io)"
+    ],
+    "deny": []
+  }
+}

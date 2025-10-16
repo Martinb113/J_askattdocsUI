@@ -17,7 +17,9 @@
       "WebSearch",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:medium.com)",
-      "WebFetch(domain:testdriven.io)"
+      "WebFetch(domain:testdriven.io)",
+      "WebFetch(domain:docs.stripe.com)",
+      "WebFetch(domain:supabase.com)"
     ],
     "deny": []
   }

@@ -14,36 +14,12 @@ Create a comprehensive PRP that enables **one-pass implementation success** thro
 
 **Therefore**: Your research and context curation directly determines implementation success. Incomplete context = implementation failure.
 
-## Research Process
-
-- Start by invoking the codebase-analysis subagent if this is a new feature or bugfix in an existing project, then read the markdown file it produces in the PRPs/planning folder.
-- When invoking the codebase analysis subagent, prompt it to research the codebase for the specific feature being implemented.
-
-> During the research process, create clear tasks and spawn as many agents and subagents as needed using the batch tools. The deeper research we do here the better the PRP will be. we optminize for chance of success and not for speed.
-
-1. **Codebase Analysis in depth**
-   - Create clear todos and spawn subagents to search the codebase for similar features/patterns Think hard and plan your approach
-   - Identify all the necessary files to reference in the PRP
-   - Note all existing conventions to follow
-   - Check existing test patterns for validation approach
-   - Use the batch tools to spawn subagents to search the codebase for similar features/patterns
-
-2. **External Research at scale**
-   - Create clear todos and spawn with instructions subagents to do deep research for similar features/patterns online and include urls to documentation and examples
-   - Library documentation (include specific URLs)
-   - For critical pieces of documentation add a .md file to PRPs/ai_docs and reference it in the PRP with clear reasoning and instructions
-   - Implementation examples (GitHub/StackOverflow/blogs)
-   - Best practices and common pitfalls found during research
-   - Use the batch tools to spawn subagents to search for similar features/patterns online and include urls to documentation and examples
-
-3. **User Clarification**
-   - Ask for clarification if you need it
 
 ## PRP Generation Process
 
 ### Step 1: Choose Template
 
-Use `PRPs/templates/prp_base.md` as your template structure - it contains all necessary sections and formatting.
+Use `PRPs/templates/prp_base.md` as your template structure - it contains all necessary sections and formatting. dont use anything from this file, its purpose is onlyto give you idea of structure and depth of content.
 
 ### Step 2: Context Completeness Validation
 

@@ -23,22 +23,36 @@ class Settings(BaseSettings):
     USE_MOCK_AZURE_AD: bool = True
 
     # Azure AD OAuth2
-    AZURE_TENANT_ID: str = "mock-tenant-id"
-    AZURE_CLIENT_ID: str = "mock-client-id"
-    AZURE_CLIENT_SECRET: str = "mock-client-secret"
-    AZURE_SCOPE: str = "https://graph.microsoft.com/.default"
+    # SECURITY: These values MUST come from .env file - never hardcode secrets!
+    # Get these from Azure Portal: https://portal.azure.com
+    AZURE_TENANT_ID: str
+    AZURE_CLIENT_ID: str
+    AZURE_CLIENT_SECRET: str
+    AZURE_SECRET_ID: str
 
-    # AskAT&T API (optional when using MOCK)
-    ASKATT_API_BASE_URL_STAGE: str = "https://stage-api.askatt.com"
-    ASKATT_API_BASE_URL_PRODUCTION: str = "https://api.askatt.com"
+    # Azure AD OAuth2 URLs and Scopes
+    # These are constructed from tenant/client IDs in .env file
+    AZURE_AUTH_URL: str
+    AZURE_SCOPE_ASKATT_GENERAL: str
+    # Note: Client credential flows require /.default suffix (per Azure AD error AADSTS1002012)
+    AZURE_SCOPE_ASKATT_DOMAIN: str
+
+    # AskAT&T API Configuration
+    # Internal API URLs - these should come from .env file
+    ASKATT_API_BASE_URL_STAGE: str
+    ASKATT_API_BASE_URL_PRODUCTION: str
+    ASKATT_DOMAIN_NAME: str = "GenerativeAI"
+    ASKATT_MODEL_NAME: str = "gpt-4o"
+    ASKATT_MAX_TOKENS: int = 800
 
     # AskDocs API (optional when using MOCK)
-    ASKDOCS_API_BASE_URL_STAGE: str = "https://stage-api.askdocs.com"
-    ASKDOCS_API_BASE_URL_PRODUCTION: str = "https://api.askdocs.com"
+    # These URLs should come from .env file to allow different environments
+    ASKDOCS_API_BASE_URL_STAGE: str
+    ASKDOCS_API_BASE_URL_PRODUCTION: str
 
     # AskDocs Configuration API Endpoints (for fetching domain configurations)
-    ASKDOCS_CONFIG_API_STAGE: str = "https://stage-api.askdocs.com"
-    ASKDOCS_CONFIG_API_PRODUCTION: str = "https://api.askdocs.com"
+    ASKDOCS_CONFIG_API_STAGE: str
+    ASKDOCS_CONFIG_API_PRODUCTION: str
 
     # CORS
     CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"

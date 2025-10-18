@@ -32,10 +32,12 @@ from app.services.conversation import (
     delete_conversation,
     generate_conversation_title,
 )
-from app.services.askatt_mock import stream_askatt_chat
+from app.services.askatt_mock import stream_askatt_chat as stream_askatt_chat_mock
+from app.services.askatt import stream_askatt_chat as stream_askatt_chat_real
 from app.services.askdocs_mock import stream_askdocs_chat
 from app.core.exceptions import ResourceNotFoundError, PermissionDeniedError, ValidationError
 from sqlalchemy import select
+from app.config import settings
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
@@ -117,11 +119,13 @@ async def chat_askatt(
             for msg in conversation_data.messages[:-1]  # Exclude the just-added user message
         ]
 
-        # Stream AI response
+        # Stream AI response (use real or mock based on settings)
         assistant_message = ""
         usage_data = None
 
-        async for chunk in stream_askatt_chat(
+        stream_func = stream_askatt_chat_mock if settings.USE_MOCK_ASKATT else stream_askatt_chat_real
+
+        async for chunk in stream_func(
             message=request.message,
             conversation_history=conversation_history,
             environment="production"

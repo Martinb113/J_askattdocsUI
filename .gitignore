@@ -1,60 +1,20 @@
-# =============================================================================
-# SECURITY-CRITICAL IGNORES - NEVER COMMIT THESE!
-# =============================================================================
-
-# Environment files (contain sensitive credentials)
+# Environment files - NEVER COMMIT THESE
 .env
-.env.local
-.env.production
-.env.*.local
-*.env
+.env.*
+!.env.example
+!.env.*.example
 backend/.env
 backend/.env.*
+!backend/.env.example
 frontend/.env
 frontend/.env.*
+!frontend/.env.example
 
-# Database files (contain user data)
-*.db
-*.sqlite
-*.sqlite3
-*.db-journal
-backend/*.db
-backend/*.sqlite
-
-# Backup files (may contain sensitive data)
-*.backup
-*.bak
-*.sql
-*.dump
-dump.sql
-*.rdb
-
-# Credentials and secrets
-credentials.json
-secrets.yaml
-secrets.yml
-*.pem
-*.key
-*.cert
-.aws/
-.azure/
-
-# =============================================================================
-# PYTHON
-# =============================================================================
-
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-
-# C extensions
-*.c
-*.cpp
-*.h
-
-# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -73,12 +33,63 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+*.pyc
+*.pyo
 
-# PyInstaller
-*.manifest
-*.spec
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+backend/venv/
 
-# Unit test / coverage reports
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Backups
+*.bak
+*.backup
+*.old
+*.tmp
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build outputs
+dist/
+dist-ssr/
+*.local
+build/
+
+# Coverage reports
 htmlcov/
 .tox/
 .nox/
@@ -93,237 +104,40 @@ coverage.xml
 .pytest_cache/
 cover/
 
-# Virtual environments
-venv/
-ENV/
-env/
-.venv
-.env
-env.bak/
-venv.bak/
-backend/venv/
-backend/.venv/
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# =============================================================================
-# JAVASCRIPT / NODE
-# =============================================================================
-
-# Dependencies
-node_modules/
-jspm_packages/
-frontend/node_modules/
-
-# Production build
-build/
-dist/
-frontend/build/
-frontend/dist/
-
-# Testing
-coverage/
-
-# Misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-.pnpm-debug.log*
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional stylelint cache
-.stylelintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-
-# =============================================================================
-# IDEs and EDITORS
-# =============================================================================
-
-# VS Code
-.vscode/
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-*.code-workspace
-
-# JetBrains IDEs (PyCharm, IntelliJ, etc.)
-.idea/
-*.iml
-*.iws
-*.ipr
-
-# Sublime Text
-*.sublime-project
-*.sublime-workspace
-
-# Vim
-*.swp
-*.swo
-*~
-
-# Emacs
-*~
-\#*\#
-.\#*
-
-# =============================================================================
-# OPERATING SYSTEMS
-# =============================================================================
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Windows
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-*.stackdump
-[Dd]esktop.ini
-$RECYCLE.BIN/
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-*.lnk
-
-# Linux
-.directory
-.Trash-*
-.nfs*
-
-# =============================================================================
-# PROJECT SPECIFIC
-# =============================================================================
-
-# Alembic (database migrations) - keep the code, ignore cache
-backend/alembic/__pycache__/
-backend/alembic/versions/__pycache__/
-
-# Logs
-*.log
-logs/
-*.log.*
-backend/*.log
-frontend/*.log
-
-# Local configuration overrides
-config.local.json
-config.local.yaml
-config.local.yml
-*.local.*
-
-# Test artifacts
-test-results/
-.pytest_cache/
-.coverage
-
-# Temporary files
-*.tmp
-*.temp
-.temp/
-.tmp/
-
-# Docker (if using later)
-docker-compose.override.yml
-.dockerignore
-
-# =============================================================================
-# DEVELOPMENT TOOLS
-# =============================================================================
-
-# Git
-*.orig
-
 # Jupyter Notebook
 .ipynb_checkpoints
-*.ipynb
 
 # pyenv
 .python-version
 
-# pipenv
-Pipfile.lock
+# Certificates and Keys
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
 
-# poetry
-poetry.lock
+# Secrets
+secrets/
+*.secret
+*.secrets
 
-# pdm
-.pdm.toml
-__pypackages__/
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# =============================================================================
-# DOCUMENTATION (Generated)
-# =============================================================================
+# Migration backup files
+*.pyc
+alembic/versions/__pycache__/
 
-# API documentation (if generated)
-docs/_build/
-site/
-
-# =============================================================================
-# MISC
-# =============================================================================
-
-# Archives
-*.zip
-*.tar.gz
-*.rar
-*.7z
-
-# Large files that shouldn't be versioned
-*.mp4
-*.mov
-*.avi
-*.mkv
-*.mp3
-*.wav
-
-# Local experiments
-scratch/
-experiments/
-playground/
-test_local/
+# Temporary files
+temp/
+tmp/
+*.temp
 

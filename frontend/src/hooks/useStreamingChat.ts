@@ -83,7 +83,11 @@ export function useStreamingChat(serviceType: 'askatt' | 'askdocs') {
 
         let accumulatedMessage = '';
         let accumulatedSources: Source[] = [];
-        let accumulatedUsage = null;
+        let accumulatedUsage: {
+          prompt_tokens: number;
+          completion_tokens: number;
+          total_tokens: number;
+        } | null = null;
         let newConversationId = request.conversation_id || null;
 
         // Buffer for incomplete SSE events across chunks

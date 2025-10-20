@@ -37,6 +37,13 @@ All notable changes to the AI Chat Application will be documented in this file.
   - Added `.trim()` to JSON strings before parsing
   - Added check to skip empty data lines
 
+- **TypeScript Type Fixes**
+  - Fixed implicit `any` type error for `accumulatedUsage` variable
+  - Added explicit type annotation for usage object
+  - Created `vite-env.d.ts` to fix `import.meta.env` TypeScript errors
+  - Location: `frontend/src/hooks/useStreamingChat.ts:86-90`
+  - Location: `frontend/src/vite-env.d.ts` (new file)
+
 ## [2025-10-20] - Response Format Fixes & Documentation Updates
 
 ### Added

@@ -34,7 +34,8 @@ from app.services.conversation import (
 )
 from app.services.askatt_mock import stream_askatt_chat as stream_askatt_chat_mock
 from app.services.askatt import stream_askatt_chat as stream_askatt_chat_real
-from app.services.askdocs_mock import stream_askdocs_chat
+from app.services.askdocs_mock import stream_askdocs_chat as stream_askdocs_chat_mock
+from app.services.askdocs import stream_askdocs_chat as stream_askdocs_chat_real
 from app.core.exceptions import ResourceNotFoundError, PermissionDeniedError, ValidationError
 from sqlalchemy import select
 from app.config import settings
@@ -248,12 +249,14 @@ async def chat_askdocs(
             for msg in conversation_data.messages[:-1]
         ]
 
-        # Stream AI response with RAG
+        # Stream AI response with RAG (use real or mock based on settings)
         assistant_message = ""
         usage_data = None
         sources_data = None
 
-        async for chunk in stream_askdocs_chat(
+        stream_func = stream_askdocs_chat_mock if settings.USE_MOCK_ASKDOCS else stream_askdocs_chat_real
+
+        async for chunk in stream_func(
             configuration_id=request.configuration_id,
             message=request.message,
             conversation_history=conversation_history,

@@ -51,7 +51,9 @@
       "Bash(./venv/Scripts/activate)",
       "Bash(alembic current:*)",
       "Bash(curl:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Read(//c/Users/admin/Documents/AI_projects/**)",
+      "Bash(git check-ignore:*)"
     ],
     "deny": []
   }

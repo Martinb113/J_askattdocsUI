@@ -1,9 +1,14 @@
 """
 Service for fetching AskDocs configurations from external API.
+Uses Azure AD OAuth2 authentication (same as AskAT&T and AskDocs).
 """
 import httpx
+import logging
 from typing import Optional
 from app.config import settings
+from app.services.azure_ad import get_askatt_token
+
+logger = logging.getLogger(__name__)
 
 
 async def fetch_configurations_by_domain(
@@ -13,6 +18,8 @@ async def fetch_configurations_by_domain(
 ) -> str:
     """
     Fetch configurations for a specific domain from external AskDocs API.
+
+    Uses Azure AD OAuth2 authentication with domain scope (same as AskDocs).
 
     Args:
         domain_name: The domain identifier to fetch configurations for
@@ -26,6 +33,14 @@ async def fetch_configurations_by_domain(
         HTTPError: If the API request fails
         TimeoutException: If the request times out
     """
+    # Get Azure AD access token (domain scope, same as AskDocs)
+    try:
+        access_token = await get_askatt_token(use_domain_scope=True)
+        logger.info(f"Successfully obtained Azure AD token for configuration fetch")
+    except Exception as e:
+        logger.error(f"Failed to get Azure AD token: {str(e)}")
+        raise Exception(f"Authentication failed: {str(e)}")
+
     # Select the appropriate API base URL
     if environment == "stage":
         base_url = settings.ASKDOCS_CONFIG_API_STAGE
@@ -41,10 +56,22 @@ async def fetch_configurations_by_domain(
         "log_as_userid": log_as_userid
     }
 
-    # Make HTTP POST request
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        response = await client.post(url, json=payload)
+    # Prepare headers with Azure AD token
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json',
+    }
+
+    logger.info(f"Fetching configurations for domain: {domain_name} from {url}")
+    logger.debug(f"Payload: {payload}")
+
+    # Make HTTP POST request with authentication
+    async with httpx.AsyncClient(verify=False, timeout=30.0) as client:
+        response = await client.post(url, json=payload, headers=headers)
         response.raise_for_status()  # Raise exception for 4xx/5xx responses
+
+        logger.info(f"Successfully fetched configurations for domain: {domain_name}")
+        logger.debug(f"Response: {response.text[:200]}...")  # Log first 200 chars
 
         # Return response as string (as per API specification)
         return response.text

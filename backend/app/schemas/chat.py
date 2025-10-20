@@ -21,10 +21,32 @@ class MessageResponse(BaseModel):
     role: str  # "user" or "assistant"
     content: str
     token_usage: Optional[dict] = None
+    sources: Optional[list[dict]] = None
     created_at: datetime
 
     class Config:
         from_attributes = True
+
+    @classmethod
+    def from_orm(cls, message):
+        """Custom from_orm to extract token_usage and sources from metadata."""
+        # Extract token_usage and sources from metadata_ field
+        token_usage = None
+        sources = None
+
+        if message.metadata_:
+            token_usage = message.metadata_.get('token_usage')
+            sources = message.metadata_.get('sources')
+
+        return cls(
+            id=message.id,
+            conversation_id=message.conversation_id,
+            role=message.role,
+            content=message.content,
+            token_usage=token_usage,
+            sources=sources,
+            created_at=message.created_at
+        )
 
 
 class ConversationResponse(BaseModel):

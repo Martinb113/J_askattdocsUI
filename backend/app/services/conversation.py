@@ -154,18 +154,30 @@ async def add_message(
         conversation_id: Conversation UUID
         role: "user" or "assistant"
         content: Message content
-        token_usage: Optional token usage stats
+        token_usage: Optional token usage stats (dict with prompt_tokens, completion_tokens, total_tokens)
         sources: Optional list of sources (for RAG responses)
 
     Returns:
         Message: Newly created message
     """
+    # Build metadata from token_usage and sources
+    metadata = {}
+    if token_usage:
+        metadata['token_usage'] = token_usage
+    if sources:
+        metadata['sources'] = sources
+
+    # Extract total token count for the token_count field
+    token_count = None
+    if token_usage and 'total_tokens' in token_usage:
+        token_count = token_usage['total_tokens']
+
     message = Message(
         conversation_id=conversation_id,
         role=role,
         content=content,
-        token_usage=token_usage,
-        sources=sources
+        token_count=token_count,
+        metadata_=metadata if metadata else None
     )
 
     db.add(message)

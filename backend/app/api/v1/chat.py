@@ -361,14 +361,7 @@ async def get_conversation_detail(
             created_at=conversation.created_at,
             updated_at=conversation.updated_at,
             messages=[
-                MessageResponse(
-                    id=msg.id,
-                    conversation_id=msg.conversation_id,
-                    role=msg.role,
-                    content=msg.content,
-                    token_usage=msg.token_usage,
-                    created_at=msg.created_at
-                )
+                MessageResponse.from_orm(msg)
                 for msg in conversation.messages
             ]
         )

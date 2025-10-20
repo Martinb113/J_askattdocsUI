@@ -107,10 +107,33 @@ async def stream_askdocs_chat(
                 yield f"data: {json.dumps({'type': 'token', 'content': char})}\\n\\n"
 
             # Extract and send source information if available
-            sources = result.get("sources", [])
-            if sources:
-                # Ensure sources are in the correct format
-                formatted_sources = []
+            # Real API format: citations array with complex structure
+            citations = result.get("citations", [])
+            sources = result.get("sources", [])  # Fallback for old format
+
+            formatted_sources = []
+
+            # Handle citations format (real API)
+            if citations:
+                for citation in citations:
+                    if isinstance(citation, dict):
+                        metadata = citation.get("metadata", {})
+                        source_url = metadata.get("source", "#")
+
+                        # Extract title from captions or page_content
+                        captions = metadata.get("captions", {})
+                        title = captions.get("text", "")[:100] if captions.get("text") else citation.get("page_content", "")[:100]
+
+                        if not title:
+                            title = f"Source {citation.get('id', 'Unknown')}"
+
+                        formatted_sources.append({
+                            "title": title,
+                            "url": source_url
+                        })
+
+            # Handle old sources format (for compatibility)
+            elif sources:
                 for source in sources:
                     if isinstance(source, dict):
                         formatted_sources.append({
@@ -118,8 +141,8 @@ async def stream_askdocs_chat(
                             "url": source.get("url", source.get("link", "#"))
                         })
 
-                if formatted_sources:
-                    yield f"data: {json.dumps({'type': 'sources', 'sources': formatted_sources})}\\n\\n"
+            if formatted_sources:
+                yield f"data: {json.dumps({'type': 'sources', 'sources': formatted_sources})}\\n\\n"
 
             # Send usage information if available
             if "usage" in result:

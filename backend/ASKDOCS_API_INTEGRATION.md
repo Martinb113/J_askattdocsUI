@@ -66,7 +66,45 @@ Content-Type: application/json
 - `config_version`: Configuration key (e.g., "sim_wiki_con_v1v1", "ois_wiki_com_v1v1")
 - `query`: User's question
 
-**Response Format** (Expected):
+**Response Formats** (Dual Format Support):
+
+The service supports both response formats for backward compatibility:
+
+**Format 1: Real AskDocs API Response with Citations** (Primary):
+```json
+{
+  "response": "The AI answer text with RAG context",
+  "citations": [
+    {
+      "id": "doc-123",
+      "metadata": {
+        "source": "https://internal-docs/article-123",
+        "chunk_id": 1,
+        "captions": {
+          "text": "Service Information Management documentation",
+          "highlights": "SIM configuration details"
+        }
+      },
+      "page_content": "Full content of the relevant document chunk...",
+      "type": "Document",
+      "aisearch_score": 0.95,
+      "aisearch_reranker_score": 0.88
+    }
+  ],
+  "usage": {
+    "total_tokens": 350,
+    "prompt_tokens": 150,
+    "completion_tokens": 200
+  },
+  "question": "How do I reset my password?",
+  "refactor_question": null,
+  "chat_history": [],
+  "aicache": false,
+  "total_latency": 2.5
+}
+```
+
+**Format 2: Simple Sources Response** (Fallback):
 ```json
 {
   "response": "The AI answer text with RAG context",
@@ -92,6 +130,8 @@ Content-Type: application/json
 - `answer` instead of `response`
 - `content` instead of `response`
 
+**Implementation Note**: The service first checks for `citations` array (real API format), extracting title from `metadata.captions.text` or `page_content`. If not found, it falls back to the `sources` array format. Both formats are converted to a unified sources array for the frontend.
+
 ## Implementation Details
 
 ### Azure AD Service (`app/services/azure_ad.py`)
@@ -112,8 +152,18 @@ The real AskDocs service:
 2. Fetches configuration details (domain_key, config_key)
 3. Formats request with domain, config_version, and query
 4. Makes POST request to AskDocs API
-5. Streams response back to client in SSE format
-6. Includes source attribution from RAG
+5. Parses response (supports both citations and sources formats)
+6. Streams response back to client in SSE format token-by-token
+7. Includes source attribution from RAG (citations or sources)
+
+**Citation Parsing Logic** (backend/app/services/askdocs.py:109-145):
+- **Primary**: Checks for `citations` array with metadata and captions
+- **Fallback**: If not found, checks for `sources` array
+- **Title Extraction**:
+  - From `metadata.captions.text` (first 100 chars)
+  - Or from `page_content` (first 100 chars)
+  - Or from `citation.id` as fallback
+- **Unified Output**: Both formats converted to `{"title": "...", "url": "..."}` array
 
 ### Chat Endpoint (`app/api/v1/chat.py:159-289`)
 
@@ -376,5 +426,5 @@ data: {"type": "error", "content": "Error message"}
 
 ---
 
-**Last Updated**: 2025-10-18
-**Status**: ✅ Implemented, ready for testing
+**Last Updated**: 2025-10-20
+**Status**: ✅ Implemented with dual format support, ready for testing

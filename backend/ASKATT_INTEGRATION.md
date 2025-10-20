@@ -100,7 +100,30 @@ Content-Type: application/json
 }
 ```
 
-**Response Format** (Expected):
+**Response Formats** (Dual Format Support):
+
+The service supports both response formats for backward compatibility:
+
+**Format 1: Real AskAT&T API Response** (Primary):
+```json
+{
+  "status": "success",
+  "modelResult": {
+    "content": "The AI response text",
+    "response_metadata": {
+      "token_usage": {
+        "prompt_tokens": 10,
+        "completion_tokens": 50,
+        "total_tokens": 60
+      },
+      "model_name": "gpt-4o-2024-08-06",
+      "finish_reason": "stop"
+    }
+  }
+}
+```
+
+**Format 2: OpenAI-like Response** (Fallback):
 ```json
 {
   "choices": [
@@ -119,6 +142,8 @@ Content-Type: application/json
   }
 }
 ```
+
+**Implementation Note**: The service first checks for the real API format (`status` + `modelResult`), then falls back to the OpenAI-like format (`choices` array) if not found. This ensures compatibility with both mock services and real API responses.
 
 ## Implementation Details
 
@@ -140,7 +165,14 @@ The real AskAT&T service:
 1. Obtains Azure AD token automatically
 2. Formats conversation history according to API spec
 3. Makes POST request to AskAT&T API
-4. Streams response back to client in SSE format
+4. Parses response (supports both real API and OpenAI-like formats)
+5. Streams response back to client in SSE format token-by-token
+
+**Response Parsing Logic** (backend/app/services/askatt.py:96-142):
+- **Primary**: Checks for `{"status": "success", "modelResult": {...}}` format
+- **Fallback**: If not found, checks for `{"choices": [...]}` OpenAI-like format
+- **Token Extraction**: Streams content character by character for real-time display
+- **Usage Data**: Extracts from `response_metadata.token_usage` or `usage` object
 
 ### Chat Endpoint (`app/api/v1/chat.py`)
 

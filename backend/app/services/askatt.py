@@ -94,8 +94,29 @@ async def stream_askatt_chat(
             logger.debug(f"Response: {json.dumps(result, indent=2)}")
 
             # Extract the assistant's response
-            # The response format may vary, adjust based on actual API response
-            if "choices" in result and len(result["choices"]) > 0:
+            # Real API format: {"status": "success", "modelResult": {"content": "...", "response_metadata": {...}}}
+            assistant_message = None
+
+            # Try new format first (real API)
+            if "status" in result and result["status"] == "success" and "modelResult" in result:
+                assistant_message = result["modelResult"].get("content", "")
+
+                # Stream the response token by token
+                for char in assistant_message:
+                    yield f"data: {json.dumps({'type': 'token', 'content': char})}\n\n"
+
+                # Send usage information if available
+                if "response_metadata" in result["modelResult"]:
+                    token_usage = result["modelResult"]["response_metadata"].get("token_usage", {})
+                    usage_data = {
+                        "prompt_tokens": token_usage.get("prompt_tokens", 0),
+                        "completion_tokens": token_usage.get("completion_tokens", 0),
+                        "total_tokens": token_usage.get("total_tokens", 0)
+                    }
+                    yield f"data: {json.dumps({'type': 'usage', 'usage': usage_data})}\n\n"
+
+            # Try old format (OpenAI-like, for compatibility)
+            elif "choices" in result and len(result["choices"]) > 0:
                 assistant_message = result["choices"][0]["message"]["content"]
 
                 # Stream the response token by token
@@ -110,6 +131,7 @@ async def stream_askatt_chat(
                         "total_tokens": result["usage"].get("total_tokens", 0)
                     }
                     yield f"data: {json.dumps({'type': 'usage', 'usage': usage_data})}\n\n"
+
             else:
                 # Handle unexpected response format
                 logger.warning(f"Unexpected API response format: {result}")

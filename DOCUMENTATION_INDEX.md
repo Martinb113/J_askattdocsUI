@@ -7,6 +7,7 @@ This document provides an overview of all documentation files in the AI Chat App
 1. **Setup:** [backend/README.md](backend/README.md) - Complete setup and installation guide
 2. **Configuration:** [backend/.env.example](backend/.env.example) - Environment variable template
 3. **Security:** [backend/SECURITY.md](backend/SECURITY.md) - Security guidelines and checklist
+4. **What's New:** [CHANGELOG.md](CHANGELOG.md) - Recent changes and updates
 
 ## Backend Documentation
 
@@ -72,6 +73,30 @@ When backend server is running:
 #### Configuration
 - `GET /api/v1/chat/configurations` - List AskDocs configurations (role-based)
 - `POST /api/v1/chat/messages/{id}/feedback` - Submit message feedback
+
+## Recent Improvements (2025-10-20)
+
+### Dual Response Format Support
+
+Both AskAT&T and AskDocs services now support multiple response formats for maximum compatibility:
+
+**AskAT&T Dual Format Support:**
+- **Primary**: Real API format with `{"status": "success", "modelResult": {...}}`
+- **Fallback**: OpenAI-like format with `{"choices": [...]}`
+- **Location**: `backend/app/services/askatt.py:96-142`
+- **Benefits**: Works with both real API and mock services seamlessly
+
+**AskDocs Citations Parsing:**
+- **Primary**: Citations array with complex metadata structure
+- **Fallback**: Simple sources array
+- **Location**: `backend/app/services/askdocs.py:109-145`
+- **Benefits**: Extracts meaningful titles from citations, handles real API response format
+
+**Why This Matters:**
+- **Backward Compatibility**: Works with existing mock services
+- **Production Ready**: Handles real API responses correctly
+- **No Breaking Changes**: Existing code continues to work
+- **Better UX**: Real-time token streaming from actual APIs
 
 ## Key Concepts
 
@@ -312,7 +337,7 @@ cd backend && python -c "import asyncio; from app.services.azure_ad import get_a
 
 ## Documentation Updates
 
-Last updated: 2025-10-18
+Last updated: 2025-10-20
 
 ### Recent Changes
 
@@ -324,19 +349,26 @@ Last updated: 2025-10-18
 - ✅ Sanitized all documentation (removed real credentials)
 - ✅ Verified .env protection in git
 - ✅ Documented Azure AD scope requirement (/.default)
+- ✅ Updated AskAT&T service for dual response format support (2025-10-20)
+- ✅ Updated AskDocs service for citations parsing (2025-10-20)
+- ✅ Updated ASKATT_INTEGRATION.md with dual format documentation (2025-10-20)
+- ✅ Updated ASKDOCS_API_INTEGRATION.md with citations format (2025-10-20)
 
 ### Documentation Status
 
 | Document | Status | Last Updated |
 |----------|--------|--------------|
 | README.md | ✅ Complete | 2025-10-18 |
-| ASKATT_INTEGRATION.md | ✅ Complete & Sanitized | 2025-10-18 |
+| ASKATT_INTEGRATION.md | ✅ Complete with Dual Format Support | 2025-10-20 |
 | ASKATT_TESTING.md | ✅ Complete & Sanitized | 2025-10-18 |
+| ASKDOCS_API_INTEGRATION.md | ✅ Complete with Citations Format | 2025-10-20 |
 | MOCK_CONFIGURATION_GUIDE.md | ✅ Complete | Earlier |
 | SECURITY.md | ✅ Complete | 2025-10-18 |
 | .env.example | ✅ Updated | 2025-10-18 |
 | .gitignore | ✅ Created | 2025-10-18 |
-| DOCUMENTATION_INDEX.md | ✅ Complete | 2025-10-18 |
+| CHANGELOG.md | ✅ Created | 2025-10-20 |
+| zzz_issues.md | ✅ Updated (Fixed issues marked) | 2025-10-20 |
+| DOCUMENTATION_INDEX.md | ✅ Complete | 2025-10-20 |
 
 ## Contributing
 

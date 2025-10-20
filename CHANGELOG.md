@@ -2,6 +2,41 @@
 
 All notable changes to the AI Chat Application will be documented in this file.
 
+## [2025-10-21] - Streaming Fixes (Backend + Frontend)
+
+### Fixed
+- **Backend Streaming Error - Message Model Fields**
+  - Fixed `TypeError: 'token_usage' is an invalid keyword argument for Message`
+  - Root cause: `add_message()` was passing non-existent fields to Message model
+  - Solution: Store token_usage and sources in `metadata_` field (JSONB)
+  - Extract `total_tokens` for the `token_count` field
+  - Location: `backend/app/services/conversation.py:141-197`
+
+- **Backend Response Schema - Token Usage Extraction**
+  - Fixed MessageResponse to read token_usage and sources from metadata
+  - Added custom `from_orm()` method to extract nested metadata
+  - Added `sources` field to MessageResponse schema
+  - Location: `backend/app/schemas/chat.py:17-49`
+
+- **Backend API Endpoint - Response Construction**
+  - Fixed chat endpoints to use `MessageResponse.from_orm(msg)`
+  - Ensures proper extraction of token_usage and sources
+  - Location: `backend/app/api/v1/chat.py:363-366`
+
+- **Frontend SSE Parsing - JSON Parse Error**
+  - Fixed `SyntaxError: JSON.parse: unexpected non-whitespace character after JSON data at line 1 column 34`
+  - Root cause: Frontend was parsing concatenated SSE events as single JSON string
+  - Solution: Implemented proper SSE event buffering with `\n\n` delimiter
+  - Added buffer to handle incomplete events across chunks
+  - Location: `frontend/src/hooks/useStreamingChat.ts:89-176`
+
+### Changed
+- **SSE Event Processing**
+  - Changed from single newline (`\n`) splitting to double newline (`\n\n`) splitting
+  - Added buffer variable to accumulate incomplete events across chunks
+  - Added `.trim()` to JSON strings before parsing
+  - Added check to skip empty data lines
+
 ## [2025-10-20] - Response Format Fixes & Documentation Updates
 
 ### Added

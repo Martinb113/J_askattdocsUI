@@ -86,6 +86,9 @@ export function useStreamingChat(serviceType: 'askatt' | 'askdocs') {
         let accumulatedUsage = null;
         let newConversationId = request.conversation_id || null;
 
+        // Buffer for incomplete SSE events across chunks
+        let buffer = '';
+
         while (true) {
           const { done, value } = await reader.read();
 
@@ -93,65 +96,80 @@ export function useStreamingChat(serviceType: 'askatt' | 'askdocs') {
             break;
           }
 
-          // Decode chunk
+          // Decode chunk and append to buffer
           const chunk = decoder.decode(value, { stream: true });
+          buffer += chunk;
 
           // Parse SSE events (format: "data: {...}\n\n")
-          const lines = chunk.split('\n');
+          // Split by double newline to get complete SSE events
+          const events = buffer.split('\n\n');
 
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const jsonStr = line.slice(6); // Remove "data: " prefix
+          // Keep the last potentially incomplete event in the buffer
+          buffer = events.pop() || '';
 
-              try {
-                const event: SSEEvent = JSON.parse(jsonStr);
+          for (const eventBlock of events) {
+            // Each event block should contain one or more "data: " lines
+            const lines = eventBlock.split('\n');
 
-                switch (event.type) {
-                  case 'token':
-                    accumulatedMessage += event.content;
-                    setState((prev) => ({
-                      ...prev,
-                      message: accumulatedMessage,
-                    }));
-                    break;
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const jsonStr = line.slice(6).trim(); // Remove "data: " prefix and trim whitespace
 
-                  case 'sources':
-                    accumulatedSources = event.sources;
-                    setState((prev) => ({
-                      ...prev,
-                      sources: accumulatedSources,
-                    }));
-                    break;
-
-                  case 'usage':
-                    accumulatedUsage = event.usage;
-                    setState((prev) => ({
-                      ...prev,
-                      usage: accumulatedUsage,
-                    }));
-                    break;
-
-                  case 'conversation_id':
-                    newConversationId = event.conversation_id;
-                    setState((prev) => ({
-                      ...prev,
-                      conversationId: newConversationId,
-                    }));
-                    break;
-
-                  case 'end':
-                    // Stream complete
-                    setState((prev) => ({
-                      ...prev,
-                      isStreaming: false,
-                    }));
-                    break;
-
-                  case 'error':
-                    throw new Error(event.content);
+                // Skip empty data lines
+                if (!jsonStr) {
+                  continue;
                 }
-              } catch (parseError) {
-                console.error('Failed to parse SSE event:', parseError, 'Line:', jsonStr);
+
+                try {
+                  const event: SSEEvent = JSON.parse(jsonStr);
+
+                  switch (event.type) {
+                    case 'token':
+                      accumulatedMessage += event.content;
+                      setState((prev) => ({
+                        ...prev,
+                        message: accumulatedMessage,
+                      }));
+                      break;
+
+                    case 'sources':
+                      accumulatedSources = event.sources;
+                      setState((prev) => ({
+                        ...prev,
+                        sources: accumulatedSources,
+                      }));
+                      break;
+
+                    case 'usage':
+                      accumulatedUsage = event.usage;
+                      setState((prev) => ({
+                        ...prev,
+                        usage: accumulatedUsage,
+                      }));
+                      break;
+
+                    case 'conversation_id':
+                      newConversationId = event.conversation_id;
+                      setState((prev) => ({
+                        ...prev,
+                        conversationId: newConversationId,
+                      }));
+                      break;
+
+                    case 'end':
+                      // Stream complete
+                      setState((prev) => ({
+                        ...prev,
+                        isStreaming: false,
+                      }));
+                      break;
+
+                    case 'error':
+                      throw new Error(event.content);
+                  }
+                } catch (parseError) {
+                  console.error('Failed to parse SSE event:', parseError, 'Line:', jsonStr);
+                }
               }
             }
           }

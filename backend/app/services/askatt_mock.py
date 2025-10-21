@@ -57,7 +57,7 @@ async def stream_askatt_chat_mock(
 
     # Simulate token-by-token streaming
     for char in response_text:
-        yield f"data: {json.dumps({'type': 'token', 'content': char})}\\n\\n"
+        yield f"data: {json.dumps({'type': 'token', 'content': char})}\n\n"
         await asyncio.sleep(0.01)  # Simulate network delay
 
     # Send mock usage statistics
@@ -67,10 +67,10 @@ async def stream_askatt_chat_mock(
         "total_tokens": len(message.split()) + len(response_text.split())
     }
 
-    yield f"data: {json.dumps({'type': 'usage', 'usage': mock_usage})}\\n\\n"
+    yield f"data: {json.dumps({'type': 'usage', 'usage': mock_usage})}\n\n"
 
     # Send end event
-    yield f"data: {json.dumps({'type': 'end'})}\\n\\n"
+    yield f"data: {json.dumps({'type': 'end'})}\n\n"
 
 
 async def stream_askatt_chat(

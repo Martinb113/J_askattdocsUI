@@ -72,7 +72,7 @@ async def stream_askdocs_chat_mock(
     config = result.scalar_one_or_none()
 
     if not config:
-        yield f"data: {json.dumps({'type': 'error', 'content': 'Configuration not found or access denied'})}\\n\\n"
+        yield f"data: {json.dumps({'type': 'error', 'content': 'Configuration not found or access denied'})}\n\n"
         return
 
     # Select appropriate mock response based on message content
@@ -95,16 +95,16 @@ async def stream_askdocs_chat_mock(
         }
 
     # Add environment indicator to answer
-    env_note = f"\\n\\n*[MOCK {environment.upper()} environment - Config: {config.config_key}]*"
+    env_note = f"\n\n*[MOCK {environment.upper()} environment - Config: {config.config_key}]*"
     answer_text = mock_data["answer"] + env_note
 
     # Stream answer token by token
     for char in answer_text:
-        yield f"data: {json.dumps({'type': 'token', 'content': char})}\\n\\n"
+        yield f"data: {json.dumps({'type': 'token', 'content': char})}\n\n"
         await asyncio.sleep(0.01)  # Simulate network delay
 
     # Send sources
-    yield f"data: {json.dumps({'type': 'sources', 'sources': mock_data['sources']})}\\n\\n"
+    yield f"data: {json.dumps({'type': 'sources', 'sources': mock_data['sources']})}\n\n"
 
     # Send mock usage statistics
     mock_usage = {
@@ -113,10 +113,10 @@ async def stream_askdocs_chat_mock(
         "total_tokens": len(message.split()) + len(answer_text.split()) + 50
     }
 
-    yield f"data: {json.dumps({'type': 'usage', 'usage': mock_usage})}\\n\\n"
+    yield f"data: {json.dumps({'type': 'usage', 'usage': mock_usage})}\n\n"
 
     # Send end event
-    yield f"data: {json.dumps({'type': 'end'})}\\n\\n"
+    yield f"data: {json.dumps({'type': 'end'})}\n\n"
 
 
 async def stream_askdocs_chat(

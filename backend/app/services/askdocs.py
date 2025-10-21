@@ -44,7 +44,7 @@ async def stream_askdocs_chat(
     config = result.scalar_one_or_none()
 
     if not config:
-        yield f"data: {json.dumps({'type': 'error', 'content': 'Configuration not found or access denied'})}\\n\\n"
+        yield f"data: {json.dumps({'type': 'error', 'content': 'Configuration not found or access denied'})}\n\n"
         return
 
     # Get Azure AD access token (same as AskAT&T)
@@ -53,7 +53,7 @@ async def stream_askdocs_chat(
         logger.info(f"Successfully obtained Azure AD token for AskDocs")
     except Exception as e:
         logger.error(f"Failed to get Azure AD token: {str(e)}")
-        yield f"data: {json.dumps({'type': 'error', 'content': 'Authentication failed'})}\\n\\n"
+        yield f"data: {json.dumps({'type': 'error', 'content': 'Authentication failed'})}\n\n"
         return
 
     # Select API URL based on environment
@@ -99,12 +99,12 @@ async def stream_askdocs_chat(
 
             if not assistant_message:
                 logger.warning(f"Unexpected API response format: {result}")
-                yield f"data: {json.dumps({'type': 'error', 'content': 'Unexpected response format'})}\\n\\n"
+                yield f"data: {json.dumps({'type': 'error', 'content': 'Unexpected response format'})}\n\n"
                 return
 
             # Stream the response token by token
             for char in assistant_message:
-                yield f"data: {json.dumps({'type': 'token', 'content': char})}\\n\\n"
+                yield f"data: {json.dumps({'type': 'token', 'content': char})}\n\n"
 
             # Extract and send source information if available
             # Real API format: citations array with complex structure
@@ -142,7 +142,7 @@ async def stream_askdocs_chat(
                         })
 
             if formatted_sources:
-                yield f"data: {json.dumps({'type': 'sources', 'sources': formatted_sources})}\\n\\n"
+                yield f"data: {json.dumps({'type': 'sources', 'sources': formatted_sources})}\n\n"
 
             # Send usage information if available
             if "usage" in result:
@@ -151,10 +151,10 @@ async def stream_askdocs_chat(
                     "completion_tokens": result["usage"].get("completion_tokens", 0),
                     "total_tokens": result["usage"].get("total_tokens", 0)
                 }
-                yield f"data: {json.dumps({'type': 'usage', 'usage': usage_data})}\\n\\n"
+                yield f"data: {json.dumps({'type': 'usage', 'usage': usage_data})}\n\n"
 
             # Send end event
-            yield f"data: {json.dumps({'type': 'end'})}\\n\\n"
+            yield f"data: {json.dumps({'type': 'end'})}\n\n"
 
     except httpx.HTTPStatusError as e:
         logger.error(f"AskDocs API error: {e.response.status_code} - {e.response.text}")
@@ -166,12 +166,12 @@ async def stream_askdocs_chat(
         except:
             error_msg = f"API error: {e.response.status_code}"
 
-        yield f"data: {json.dumps({'type': 'error', 'content': error_msg})}\\n\\n"
+        yield f"data: {json.dumps({'type': 'error', 'content': error_msg})}\n\n"
 
     except httpx.TimeoutException:
         logger.error(f"AskDocs API timeout")
-        yield f"data: {json.dumps({'type': 'error', 'content': 'Request timeout - API took too long to respond'})}\\n\\n"
+        yield f"data: {json.dumps({'type': 'error', 'content': 'Request timeout - API took too long to respond'})}\n\n"
 
     except Exception as e:
         logger.error(f"Error calling AskDocs API: {str(e)}", exc_info=True)
-        yield f"data: {json.dumps({'type': 'error', 'content': f'Service error: {str(e)}'})}\\n\\n"
+        yield f"data: {json.dumps({'type': 'error', 'content': f'Service error: {str(e)}'})}\n\n"

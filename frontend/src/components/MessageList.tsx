@@ -13,6 +13,7 @@ interface MessageListProps {
   streamingMessage?: { content: string; sources?: Source[] };
   isStreaming?: boolean;
   onFeedback?: (messageId: string, rating: number) => void;
+  onRegenerate?: (messageId: string) => void;
 }
 
 export function MessageList({
@@ -20,6 +21,7 @@ export function MessageList({
   streamingMessage,
   isStreaming = false,
   onFeedback,
+  onRegenerate,
 }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +57,11 @@ export function MessageList({
               onFeedback={
                 message.role === 'assistant' && onFeedback
                   ? (rating) => onFeedback(message.id, rating)
+                  : undefined
+              }
+              onRegenerate={
+                message.role === 'assistant' && onRegenerate
+                  ? () => onRegenerate(message.id)
                   : undefined
               }
             />

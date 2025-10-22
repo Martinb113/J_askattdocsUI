@@ -62,10 +62,12 @@ export function Chat() {
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent, messageToSend?: string) => {
     e.preventDefault();
 
-    if (!inputMessage.trim() || isStreaming) {
+    const messageContent = messageToSend || inputMessage;
+
+    if (!messageContent.trim() || isStreaming) {
       return;
     }
 
@@ -80,17 +82,19 @@ export function Chat() {
       id: Date.now().toString(),
       conversation_id: conversationId || '',
       role: 'user',
-      content: inputMessage,
+      content: messageContent,
       created_at: new Date().toISOString(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    setInputMessage('');
+    if (!messageToSend) {
+      setInputMessage('');
+    }
 
     try {
       // Send message with streaming
       const result = await sendMessage({
-        message: inputMessage,
+        message: messageContent,
         conversation_id: conversationId || undefined,
         configuration_id: serviceType === 'askdocs' ? selectedConfig : undefined,
       });
@@ -122,6 +126,41 @@ export function Chat() {
     } catch (error) {
       console.error('Failed to submit feedback:', error);
       toast.error('Failed to submit feedback');
+    }
+  };
+
+  const handleRegenerate = async (messageId: string) => {
+    // Find the assistant message to regenerate
+    const messageIndex = messages.findIndex((msg) => msg.id === messageId);
+    if (messageIndex === -1 || messages[messageIndex].role !== 'assistant') {
+      toast.error('Cannot regenerate this message');
+      return;
+    }
+
+    // Find the user message that preceded this assistant message
+    let userMessageContent = '';
+    for (let i = messageIndex - 1; i >= 0; i--) {
+      if (messages[i].role === 'user') {
+        userMessageContent = messages[i].content;
+        break;
+      }
+    }
+
+    if (!userMessageContent) {
+      toast.error('Cannot find the original question');
+      return;
+    }
+
+    // Remove the assistant message from the list
+    setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
+
+    // Resend the user message
+    try {
+      await handleSubmit(new Event('submit') as any, userMessageContent);
+      toast.info('Regenerating response...');
+    } catch (error) {
+      console.error('Failed to regenerate message:', error);
+      toast.error('Failed to regenerate response');
     }
   };
 
@@ -250,6 +289,7 @@ export function Chat() {
         }
         isStreaming={isStreaming}
         onFeedback={handleFeedback}
+        onRegenerate={handleRegenerate}
       />
 
         {/* Error Display */}

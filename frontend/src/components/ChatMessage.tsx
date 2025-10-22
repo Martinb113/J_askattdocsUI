@@ -4,10 +4,11 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { User, Bot, ExternalLink, ThumbsUp, ThumbsDown, Copy, Check, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
+import { User, Bot, ExternalLink, ThumbsUp, ThumbsDown, Copy, Check, RefreshCw, ChevronDown, ChevronUp, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Message, Source } from '@/types';
 import { cn } from '@/lib/utils';
+import { SourcePreviewModal } from './SourcePreviewModal';
 
 interface ChatMessageProps {
   message: Message | { role: 'user' | 'assistant'; content: string; sources?: Source[] };
@@ -20,6 +21,7 @@ export function ChatMessage({ message, isStreaming = false, onFeedback, onRegene
   const isUser = message.role === 'user';
   const [copied, setCopied] = useState(false);
   const [sourcesExpanded, setSourcesExpanded] = useState(false);
+  const [selectedSource, setSelectedSource] = useState<{ source: Source; number: number } | null>(null);
 
   const handleCopy = async () => {
     try {
@@ -118,7 +120,7 @@ export function ChatMessage({ message, isStreaming = false, onFeedback, onRegene
                 {message.sources.map((source, index) => (
                   <div
                     key={index}
-                    className="bg-gray-50 rounded-lg p-3 border border-gray-200"
+                    className="bg-gray-50 rounded-lg p-3 border border-gray-200 hover:border-primary-300 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
@@ -132,7 +134,16 @@ export function ChatMessage({ message, isStreaming = false, onFeedback, onRegene
                           <span className="break-words">{source.title}</span>
                         </a>
                       </div>
-                      <span className="text-xs text-gray-500 flex-shrink-0">#{index + 1}</span>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <button
+                          onClick={() => setSelectedSource({ source, number: index + 1 })}
+                          className="p-1 text-gray-400 hover:text-primary-600 transition-colors"
+                          title="Preview source"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <span className="text-xs text-gray-500">#{index + 1}</span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -170,6 +181,14 @@ export function ChatMessage({ message, isStreaming = false, onFeedback, onRegene
           </div>
         )}
       </div>
+
+      {/* Source Preview Modal */}
+      <SourcePreviewModal
+        isOpen={selectedSource !== null}
+        onClose={() => setSelectedSource(null)}
+        source={selectedSource?.source || null}
+        sourceNumber={selectedSource?.number}
+      />
     </div>
   );
 }

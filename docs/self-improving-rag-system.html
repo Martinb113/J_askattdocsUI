@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Self-Improving RAG System - Feature Proposal</title>
+    <title>Self-Improving RAG System - Technical Specification</title>
     <style>
         * {
             margin: 0;
@@ -347,62 +347,401 @@
             <p>Intelligent Feedback Loop with SME Validation & Continuous Learning</p>
         </header>
 
-        <!-- Executive Summary -->
+        <!-- Table of Contents -->
         <div class="section">
-            <h2>📊 Executive Summary</h2>
-            <p>A revolutionary system that transforms user feedback and SME corrections into automatic improvements for RAG (Retrieval-Augmented Generation) responses. The system learns from every interaction, creating a virtuous cycle of continuous improvement.</p>
-
-            <div class="value-prop">
-                <div class="value-card">
-                    <h4>🎯 Accuracy</h4>
-                    <p>Self-corrects based on expert validation</p>
-                </div>
-                <div class="value-card">
-                    <h4>⚡ Efficiency</h4>
-                    <p>Reduces manual intervention by 80%</p>
-                </div>
-                <div class="value-card">
-                    <h4>📈 Scalability</h4>
-                    <p>Learns and improves at scale</p>
-                </div>
-                <div class="value-card">
-                    <h4>💰 ROI</h4>
-                    <p>Decreasing cost per query over time</p>
-                </div>
-            </div>
+            <h2>📋 Table of Contents</h2>
+            <ol>
+                <li><a href="#problem">The Problem</a></li>
+                <li><a href="#approaches">Five Improvement Approaches</a></li>
+                <li><a href="#quality-testing">Initial Quality Testing Framework</a></li>
+                <li><a href="#core-solution">Core Solution: Intelligent Feedback Loop</a></li>
+                <li><a href="#architecture">System Architecture</a></li>
+                <li><a href="#components">Key Components</a></li>
+                <li><a href="#sme-workflow">SME Correction Workflow</a></li>
+                <li><a href="#implementation">Technical Implementation Plan</a></li>
+                <li><a href="#metrics">Efficiency Metrics & Measurement</a></li>
+                <li><a href="#risks">Risks & Mitigation</a></li>
+            </ol>
         </div>
 
         <!-- Problem Statement -->
-        <div class="section">
+        <div class="section" id="problem">
             <h2>🎯 The Problem</h2>
 
             <h3>Current State Challenges</h3>
             <ul>
-                <li><strong>Static Knowledge</strong>: RAG systems don't learn from mistakes</li>
-                <li><strong>Manual Intervention</strong>: SMEs must repeatedly correct same errors</li>
-                <li><strong>Wasted Feedback</strong>: User thumbs up/down collected but not actionable</li>
+                <li><strong>Static Knowledge</strong>: RAG systems don't learn from mistakes or user corrections</li>
+                <li><strong>Repeated Manual Intervention</strong>: SMEs must correct the same errors multiple times</li>
+                <li><strong>Wasted Feedback Data</strong>: User thumbs up/down collected but not actionable</li>
                 <li><strong>Knowledge Gaps</strong>: No systematic way to identify and fill documentation holes</li>
                 <li><strong>Quality Drift</strong>: System accuracy degrades as content becomes stale</li>
+                <li><strong>No Failure Analysis</strong>: Limited understanding of why certain queries fail</li>
+                <li><strong>Response Time Variability</strong>: Inefficient retrieval paths for common queries</li>
             </ul>
 
             <div class="highlight-box">
-                <strong>Key Insight:</strong> Every negative feedback and SME correction contains valuable training data that's currently being thrown away.
+                <strong>Key Insight:</strong> Every negative feedback and SME correction contains valuable training data that's currently being discarded. This represents a massive opportunity for automated continuous improvement.
             </div>
         </div>
 
-        <!-- The Solution -->
-        <div class="section">
-            <h2>💡 The Solution: Intelligent Feedback Loop</h2>
+        <!-- Five Approaches -->
+        <div class="section" id="approaches">
+            <h2>🛠️ Five Improvement Approaches</h2>
+            <p>We recommend implementing all five approaches in parallel or sequentially to create a comprehensive self-improving system:</p>
 
-            <h3>Core Concept</h3>
-            <p>A closed-loop system where feedback drives automatic improvements through multiple intelligence layers:</p>
+            <div class="component-grid">
+                <div class="component-card">
+                    <h4>1. Response Quality Analytics & Feedback Loop</h4>
+                    <p><strong>Value:</strong> Transforms passive feedback into active system improvements</p>
+                    <ul>
+                        <li>Collect structured feedback (ratings, issue types, corrections)</li>
+                        <li>Identify patterns in failures and successes</li>
+                        <li>Auto-flag low-quality responses for review</li>
+                        <li>Create closed-loop learning from SME corrections</li>
+                    </ul>
+                    <p><strong>Efficiency Gain:</strong> Reduces repeated errors by 80-90%</p>
+                </div>
+
+                <div class="component-card">
+                    <h4>2. Intelligent Source Verification & Citation Scoring</h4>
+                    <p><strong>Value:</strong> Ensures retrieval quality improves over time</p>
+                    <ul>
+                        <li>Track source → answer quality correlation</li>
+                        <li>Detect contradictions between sources</li>
+                        <li>Identify outdated or unreliable documents</li>
+                        <li>Dynamically adjust source rankings</li>
+                    </ul>
+                    <p><strong>Efficiency Gain:</strong> Improves answer accuracy by 20-30%</p>
+                </div>
+
+                <div class="component-card">
+                    <h4>3. Conversation Context Analysis & Optimization</h4>
+                    <p><strong>Value:</strong> Learns from conversation patterns to anticipate needs</p>
+                    <ul>
+                        <li>Analyze successful conversation flows</li>
+                        <li>Detect context windows that improve responses</li>
+                        <li>Optimize follow-up question handling</li>
+                        <li>Pre-load relevant context for common paths</li>
+                    </ul>
+                    <p><strong>Efficiency Gain:</strong> Reduces conversation length by 25%</p>
+                </div>
+
+                <div class="component-card">
+                    <h4>4. Agentic Workflow Observability & Debugging</h4>
+                    <p><strong>Value:</strong> Makes agent decision-making transparent and improvable</p>
+                    <ul>
+                        <li>Trace agent reasoning chains</li>
+                        <li>Identify decision points that lead to failures</li>
+                        <li>Visualize tool usage patterns</li>
+                        <li>Create replays for debugging</li>
+                    </ul>
+                    <p><strong>Efficiency Gain:</strong> Reduces debugging time by 70%</p>
+                </div>
+
+                <div class="component-card">
+                    <h4>5. Self-Improving Learning Engine</h4>
+                    <p><strong>Value:</strong> Creates autonomous improvement without human intervention</p>
+                    <ul>
+                        <li>A/B test prompt variations automatically</li>
+                        <li>Generate synthetic training data from corrections</li>
+                        <li>Fine-tune models based on validated feedback</li>
+                        <li>Auto-update retrieval weights</li>
+                    </ul>
+                    <p><strong>Efficiency Gain:</strong> Enables 75% of improvements to happen automatically</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>Recommended Approach:</strong> Start with #1 (Response Quality Analytics) as the foundation, then layer in #2 and #5 to create the core self-improving loop. Add #3 and #4 as needed for more advanced optimization.
+            </div>
+        </div>
+
+        <!-- Quality Testing Framework -->
+        <div class="section" id="quality-testing">
+            <h2>🧪 Initial Quality Testing Framework</h2>
+            <p>Before implementing improvements, establish rigorous quality baselines and testing methodology:</p>
+
+            <h3>Phase 1: Golden Dataset Creation</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                        <strong>Collect Representative Queries</strong>
+                        <p>Mine production logs for 200-500 real user queries covering:</p>
+                        <ul>
+                            <li>Common questions (80% of traffic)</li>
+                            <li>Edge cases and rare queries</li>
+                            <li>Multi-step conversations</li>
+                            <li>Ambiguous or underspecified queries</li>
+                            <li>Different domains/configurations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                        <strong>SME Validation</strong>
+                        <p>Subject Matter Experts create "ideal" responses for each query:</p>
+                        <ul>
+                            <li>Write reference answer</li>
+                            <li>Cite required sources</li>
+                            <li>Flag tricky or ambiguous cases</li>
+                            <li>Define success criteria (factual accuracy, completeness, tone)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                        <strong>Baseline Evaluation</strong>
+                        <p>Run current system against golden dataset:</p>
+                        <ul>
+                            <li>Measure accuracy (semantic similarity to reference)</li>
+                            <li>Measure source quality (did it cite correct docs?)</li>
+                            <li>Measure response time</li>
+                            <li>Identify failure modes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-content">
+                        <strong>Store as Test Suite</strong>
+                        <p>Version control golden dataset in database:</p>
+                        <ul>
+                            <li>Query text</li>
+                            <li>Reference answer</li>
+                            <li>Expected sources</li>
+                            <li>Success criteria</li>
+                            <li>Current system performance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Phase 2: Automated Testing Pipeline</h3>
+            <p>Create continuous testing infrastructure to validate improvements:</p>
+
+            <div class="code-block">
+# Automated Quality Testing Pipeline
+
+import asyncio
+from app.services.askdocs import stream_askdocs_chat_real
+from app.testing.golden_dataset import load_golden_examples
+from app.testing.evaluators import (
+    semantic_similarity_score,
+    source_overlap_score,
+    factual_accuracy_score,
+    coherence_score
+)
+
+async def run_quality_benchmark(model_version: str):
+    """
+    Run full quality benchmark against golden dataset.
+    Returns comprehensive metrics for regression testing.
+    """
+    golden_examples = load_golden_examples()
+    results = []
+
+    for example in golden_examples:
+        # Generate response
+        response = await generate_response(
+            query=example.query,
+            configuration_id=example.configuration_id
+        )
+
+        # Evaluate response
+        scores = {
+            'semantic_similarity': semantic_similarity_score(
+                response.content,
+                example.reference_answer
+            ),
+            'source_overlap': source_overlap_score(
+                response.sources,
+                example.expected_sources
+            ),
+            'factual_accuracy': factual_accuracy_score(
+                response.content,
+                example.reference_answer,
+                example.facts
+            ),
+            'coherence': coherence_score(response.content),
+            'response_time': response.elapsed_time
+        }
+
+        # Check success criteria
+        passed = all([
+            scores['semantic_similarity'] >= 0.85,
+            scores['source_overlap'] >= 0.7,
+            scores['factual_accuracy'] >= 0.95,
+            scores['coherence'] >= 0.8
+        ])
+
+        results.append({
+            'query': example.query,
+            'scores': scores,
+            'passed': passed,
+            'model_version': model_version
+        })
+
+    # Aggregate metrics
+    aggregate_metrics = {
+        'total_examples': len(results),
+        'passed': sum(r['passed'] for r in results),
+        'pass_rate': sum(r['passed'] for r in results) / len(results),
+        'avg_semantic_similarity': avg([r['scores']['semantic_similarity'] for r in results]),
+        'avg_source_overlap': avg([r['scores']['semantic_similarity'] for r in results]),
+        'avg_factual_accuracy': avg([r['scores']['factual_accuracy'] for r in results]),
+        'avg_response_time': avg([r['scores']['response_time'] for r in results]),
+        'failures': [r for r in results if not r['passed']]
+    }
+
+    # Store results for comparison
+    store_benchmark_results(model_version, aggregate_metrics, results)
+
+    return aggregate_metrics
+
+
+async def continuous_benchmarking():
+    """
+    Run benchmarks periodically to detect quality regressions.
+    """
+    while True:
+        current_version = get_current_model_version()
+        metrics = await run_quality_benchmark(current_version)
+
+        # Alert if quality degrades
+        if metrics['pass_rate'] < 0.90:
+            alert_team(f"Quality regression detected: {metrics['pass_rate']:.1%} pass rate")
+
+        # Wait 6 hours before next run
+        await asyncio.sleep(6 * 3600)
+            </div>
+
+            <h3>Phase 3: SME User-in-the-Loop Testing</h3>
+            <p>Involve domain experts in validating responses before production deployment:</p>
+
+            <div class="component-grid">
+                <div class="component-card">
+                    <h4>Weekly SME Review Sessions</h4>
+                    <ul>
+                        <li>Present 20-30 randomly sampled responses</li>
+                        <li>SMEs rate accuracy and usefulness</li>
+                        <li>Discuss edge cases and improvements</li>
+                        <li>Update golden dataset with learnings</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h4>Shadow Mode Testing</h4>
+                    <ul>
+                        <li>Run new model in parallel with production</li>
+                        <li>Compare responses side-by-side</li>
+                        <li>SMEs blindly rate both versions</li>
+                        <li>Only promote if new version wins significantly</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h4>Canary Deployment</h4>
+                    <ul>
+                        <li>Route 5% of traffic to new model</li>
+                        <li>Monitor feedback scores closely</li>
+                        <li>Gradual rollout: 5% → 25% → 50% → 100%</li>
+                        <li>Instant rollback if metrics degrade</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h4>Adversarial Testing</h4>
+                    <ul>
+                        <li>Create intentionally tricky queries</li>
+                        <li>Test with outdated information</li>
+                        <li>Try contradictory sources</li>
+                        <li>Validate failure handling</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Phase 4: Continuous Quality Metrics Dashboard</h3>
+            <p>Real-time monitoring of system quality with alerts:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Target</th>
+                        <th>Alert Threshold</th>
+                        <th>Measurement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Response Accuracy</td>
+                        <td>&gt; 90%</td>
+                        <td>&lt; 85%</td>
+                        <td>Semantic similarity to references</td>
+                    </tr>
+                    <tr>
+                        <td>Source Quality</td>
+                        <td>&gt; 85%</td>
+                        <td>&lt; 75%</td>
+                        <td>Overlap with expected sources</td>
+                    </tr>
+                    <tr>
+                        <td>User Satisfaction</td>
+                        <td>&gt; 80% positive</td>
+                        <td>&lt; 70% positive</td>
+                        <td>Thumbs up/down ratio</td>
+                    </tr>
+                    <tr>
+                        <td>Response Time (p95)</td>
+                        <td>&lt; 3 seconds</td>
+                        <td>&gt; 5 seconds</td>
+                        <td>Time from query to completion</td>
+                    </tr>
+                    <tr>
+                        <td>Hallucination Rate</td>
+                        <td>&lt; 2%</td>
+                        <td>&gt; 5%</td>
+                        <td>NLI contradiction detection</td>
+                    </tr>
+                    <tr>
+                        <td>Coverage Rate</td>
+                        <td>&gt; 95%</td>
+                        <td>&lt; 90%</td>
+                        <td>% queries with good answer</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <strong>Testing Philosophy:</strong> Measure everything, trust but verify, and never deploy without validation. The golden dataset is your north star - it should grow over time as you discover new edge cases.
+            </div>
+        </div>
+
+        <!-- Core Solution -->
+        <div class="section" id="core-solution">
+            <h2>💡 Core Solution: Intelligent Feedback Loop</h2>
+
+            <h3>Closed-Loop Learning System</h3>
+            <p>A system where feedback drives automatic improvements through multiple intelligence layers:</p>
 
             <div class="flow-diagram">
                 <div class="flow-step">
                     <div class="flow-step-number">1</div>
                     <div class="flow-step-content">
                         <strong>User Query</strong>
-                        <p>User asks question → System provides answer with sources</p>
+                        <p>User asks question → System provides answer with sources → Response quality predicted</p>
                     </div>
                 </div>
 
@@ -412,7 +751,7 @@
                     <div class="flow-step-number">2</div>
                     <div class="flow-step-content">
                         <strong>Feedback Collection</strong>
-                        <p>User provides rating (👍/👎) + optional comment + flags issues</p>
+                        <p>User provides rating (👍/👎) + optional comment + issue type flags</p>
                     </div>
                 </div>
 
@@ -422,7 +761,7 @@
                     <div class="flow-step-number">3</div>
                     <div class="flow-step-content">
                         <strong>Anomaly Detection</strong>
-                        <p>AI analyzes feedback patterns → Flags high-priority issues</p>
+                        <p>AI analyzes feedback patterns → Flags high-priority issues → Clusters similar failures</p>
                     </div>
                 </div>
 
@@ -432,7 +771,7 @@
                     <div class="flow-step-number">4</div>
                     <div class="flow-step-content">
                         <strong>SME Review Queue</strong>
-                        <p>Subject Matter Experts review flagged responses → Provide corrections</p>
+                        <p>Subject Matter Experts review flagged responses → Provide corrections and better sources</p>
                     </div>
                 </div>
 
@@ -441,8 +780,8 @@
                 <div class="flow-step">
                     <div class="flow-step-number">5</div>
                     <div class="flow-step-content">
-                        <strong>Learning Engine</strong>
-                        <p>System extracts patterns → Updates retrieval, prompts, and knowledge base</p>
+                        <strong>Pattern Learning Engine</strong>
+                        <p>System extracts patterns from corrections → Identifies root causes → Generates improvement hypotheses</p>
                     </div>
                 </div>
 
@@ -451,47 +790,173 @@
                 <div class="flow-step">
                     <div class="flow-step-number">6</div>
                     <div class="flow-step-content">
-                        <strong>Automatic Improvement</strong>
-                        <p>Better answers for similar future queries → Reduced feedback → Cycle repeats</p>
+                        <strong>Automated Improvement</strong>
+                        <p>Updates retrieval weights → Evolves prompts → Fine-tunes models → A/B tests changes</p>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-step-number">7</div>
+                    <div class="flow-step-content">
+                        <strong>Validation & Deployment</strong>
+                        <p>Test against golden dataset → Verify improvement → Gradual rollout → Cycle repeats</p>
                     </div>
                 </div>
             </div>
+
+            <h3>Multi-Layer Learning Timescales</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Timescale</th>
+                        <th>Mechanism</th>
+                        <th>Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Real-Time Cache</td>
+                        <td>Seconds</td>
+                        <td>Store SME corrections in fast cache → Reuse for identical queries</td>
+                        <td>Instant fix for repeated queries</td>
+                    </tr>
+                    <tr>
+                        <td>Short-Term Learning</td>
+                        <td>Hours - Days</td>
+                        <td>Extract patterns → Update system prompts → A/B test changes</td>
+                        <td>Improved handling of similar queries</td>
+                    </tr>
+                    <tr>
+                        <td>Medium-Term Optimization</td>
+                        <td>Weeks</td>
+                        <td>Analyze source performance → Adjust embedding weights → Re-rank results</td>
+                        <td>Better retrieval across query types</td>
+                    </tr>
+                    <tr>
+                        <td>Long-Term Fine-Tuning</td>
+                        <td>Months</td>
+                        <td>Accumulate golden examples → Fine-tune LLM → Deploy improved model</td>
+                        <td>Fundamental improvement in capabilities</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <!-- System Architecture -->
-        <div class="section">
+        <div class="section" id="architecture">
             <h2>🏗️ System Architecture</h2>
 
             <div class="architecture-diagram">
                 <div class="layer">
                     <div class="layer-title">📱 User Interface Layer</div>
-                    <p>Feedback Widget | SME Review Dashboard | Analytics Dashboard</p>
+                    <p>Feedback Widget | SME Review Dashboard | Analytics Dashboard | Quality Monitoring</p>
                 </div>
 
                 <div class="layer">
                     <div class="layer-title">🧠 Intelligence Layer</div>
-                    <p>Anomaly Detector | Pattern Analyzer | Improvement Recommender | Auto-Optimizer</p>
+                    <p>Anomaly Detector | Pattern Analyzer | Improvement Recommender | Quality Predictor | A/B Test Orchestrator</p>
                 </div>
 
                 <div class="layer">
                     <div class="layer-title">💾 Data Layer</div>
-                    <p>Feedback DB | Correction History | Performance Metrics | Golden Dataset</p>
+                    <p>Feedback DB | Correction History | Performance Metrics | Golden Dataset | Experiment Results</p>
                 </div>
 
                 <div class="layer">
                     <div class="layer-title">🔧 Improvement Layer</div>
-                    <p>Prompt Evolver | Retrieval Tuner | Knowledge Base Updater | Model Fine-tuner</p>
+                    <p>Prompt Evolver | Retrieval Tuner | Knowledge Base Updater | Model Fine-tuner | Source Ranker</p>
                 </div>
 
                 <div class="layer">
                     <div class="layer-title">⚙️ RAG Core</div>
-                    <p>Vector DB | LLM | Document Processor | Source Ranker</p>
+                    <p>Vector DB | LLM | Document Processor | Embedding Model | Context Manager</p>
                 </div>
+            </div>
+
+            <h3>Data Flow Diagram</h3>
+            <div class="code-block">
+┌─────────────┐
+│ User Query  │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────────────────────────────────────────┐
+│          RAG System (Vector DB + LLM)           │
+│  1. Retrieve documents                          │
+│  2. Rank sources                                │
+│  3. Generate response                           │
+│  4. Predict quality                             │
+└──────┬──────────────────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────────────────────┐
+│          Response + Sources                     │
+│  + Predicted Quality Score                      │
+└──────┬──────────────────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────────────────────┐
+│       User Feedback Collection                  │
+│  - Rating (👍/👎)                               │
+│  - Comment (optional)                           │
+│  - Issue type flags                             │
+└──────┬──────────────────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────────────────────┐
+│      Anomaly Detection Engine                   │
+│  - Low rating cluster detection                 │
+│  - Confidence-accuracy mismatch                 │
+│  - Source quality issues                        │
+│  - Semantic clustering of failures              │
+└──────┬──────────────────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────────────────────┐
+│         SME Review Queue                        │
+│  Priority-sorted flagged responses              │
+└──────┬──────────────────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────────────────────┐
+│      SME Correction + Validation                │
+│  - Corrected answer                             │
+│  - Better sources                               │
+│  - Improvement notes                            │
+└──────┬──────────────────────────────────────────┘
+       │
+       ├──────┬──────┬──────┬──────┐
+       │      │      │      │      │
+       ▼      ▼      ▼      ▼      ▼
+   ┌────┐ ┌────┐ ┌────┐ ┌────┐ ┌────┐
+   │Cache│ │Prompt│ │Retrieval│ │Fine- │ │Knowledge│
+   │     │ │Tuner │ │Optimizer│ │tune  │ │Base     │
+   │Update│ │      │ │         │ │Queue │ │Gap      │
+   └────┘ └────┘ └────┘ └────┘ └────┘
+       │      │      │      │      │
+       └──────┴──────┴──────┴──────┘
+                     │
+                     ▼
+         ┌────────────────────┐
+         │  A/B Testing       │
+         │  Validation        │
+         │  Golden Dataset    │
+         └─────────┬──────────┘
+                   │
+                   ▼
+         ┌────────────────────┐
+         │  Gradual Rollout   │
+         │  Production Deploy │
+         └────────────────────┘
             </div>
         </div>
 
         <!-- Key Components -->
-        <div class="section">
+        <div class="section" id="components">
             <h2>🔧 Key Components</h2>
 
             <div class="component-grid">
@@ -499,10 +964,11 @@
                     <h4>1. Enhanced Feedback Widget</h4>
                     <p><strong>What Users See:</strong></p>
                     <ul>
-                        <li>👍 👎 Quick rating</li>
-                        <li>Comment box for details</li>
-                        <li>Issue tags: "Wrong answer", "Missing info", "Outdated", "Bad source"</li>
-                        <li>"Suggest better answer" option</li>
+                        <li>👍 👎 Quick rating buttons</li>
+                        <li>Modal with optional comment textarea (1000 char max)</li>
+                        <li>Issue type tags: "Wrong answer", "Missing info", "Outdated source", "Bad citation"</li>
+                        <li>"Suggest better answer" rich text editor</li>
+                        <li>Character counter and submission feedback</li>
                     </ul>
                 </div>
 
@@ -510,21 +976,25 @@
                     <h4>2. Anomaly Detection Engine</h4>
                     <p><strong>Automatically Flags:</strong></p>
                     <ul>
-                        <li>Responses with &lt;60% positive rating</li>
-                        <li>Clusters of similar complaints</li>
-                        <li>Confidence mismatches (confident but wrong)</li>
-                        <li>Missing critical sources</li>
+                        <li>Responses with &lt;60% positive rating (statistical significance check)</li>
+                        <li>Clusters of similar complaints (semantic clustering)</li>
+                        <li>Confidence mismatches (predicted quality vs. actual rating)</li>
+                        <li>Missing critical sources (expected sources not retrieved)</li>
+                        <li>Outlier response times (&gt;2x median)</li>
+                        <li>Hallucination indicators (NLI contradiction detection)</li>
                     </ul>
                 </div>
 
                 <div class="component-card">
                     <h4>3. SME Review Dashboard</h4>
-                    <p><strong>Expert Interface:</strong></p>
+                    <p><strong>Expert Interface Features:</strong></p>
                     <ul>
-                        <li>Prioritized queue (worst first)</li>
-                        <li>Side-by-side: bad answer vs. sources</li>
-                        <li>Correction editor with diff view</li>
-                        <li>Approve/Reject/Escalate actions</li>
+                        <li>Prioritized queue (worst first, then by impact)</li>
+                        <li>Side-by-side: bad answer vs. retrieved sources</li>
+                        <li>Correction editor with markdown support and diff view</li>
+                        <li>Source suggestion widget (search and add better docs)</li>
+                        <li>Approve/Reject/Escalate workflow</li>
+                        <li>Batch similar issues for efficient review</li>
                     </ul>
                 </div>
 
@@ -532,39 +1002,79 @@
                     <h4>4. Pattern Learning Engine</h4>
                     <p><strong>Extracts Insights:</strong></p>
                     <ul>
-                        <li>Common failure modes</li>
-                        <li>Missing knowledge areas</li>
-                        <li>Best performing prompts</li>
+                        <li>Common failure modes (topic clustering)</li>
+                        <li>Missing knowledge areas (gap analysis)</li>
+                        <li>Best performing prompt patterns</li>
                         <li>Optimal source combinations</li>
+                        <li>Temporal patterns (time-of-day, seasonal)</li>
+                        <li>User segment differences</li>
                     </ul>
                 </div>
 
                 <div class="component-card">
-                    <h4>5. Auto-Improvement System</h4>
-                    <p><strong>Applies Fixes:</strong></p>
+                    <h4>5. Quality Prediction Model</h4>
+                    <p><strong>Pre-Flight Quality Assessment:</strong></p>
                     <ul>
-                        <li>Adds SME corrections to fine-tuning set</li>
-                        <li>Updates retrieval weights</li>
-                        <li>Modifies system prompts</li>
+                        <li>Predict response quality before showing to user</li>
+                        <li>Features: source freshness, relevance, coverage, confidence</li>
+                        <li>ML classifier (LightGBM) trained on historical feedback</li>
+                        <li>Low-quality responses auto-flagged or hedged</li>
+                        <li>Continuous model retraining</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h4>6. Auto-Improvement System</h4>
+                    <p><strong>Applies Fixes Automatically:</strong></p>
+                    <ul>
+                        <li>Adds SME corrections to fine-tuning dataset</li>
+                        <li>Updates retrieval weights based on performance</li>
+                        <li>Modifies system prompts via learned templates</li>
                         <li>Creates synthetic training examples</li>
+                        <li>Generates A/B test hypotheses</li>
                     </ul>
                 </div>
 
                 <div class="component-card">
-                    <h4>6. Knowledge Gap Analyzer</h4>
-                    <p><strong>Identifies Needs:</strong></p>
+                    <h4>7. Knowledge Gap Analyzer</h4>
+                    <p><strong>Identifies Content Needs:</strong></p>
                     <ul>
-                        <li>Topics with high fail rate</li>
-                        <li>Questions without good sources</li>
-                        <li>Outdated documentation</li>
-                        <li>Content creation priorities</li>
+                        <li>Topics with high fail rate but no good sources</li>
+                        <li>Questions without relevant documents</li>
+                        <li>Outdated documentation (timestamp analysis)</li>
+                        <li>Content creation priorities (ranked by impact)</li>
+                        <li>Coverage heatmaps by domain</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h4>8. A/B Testing Framework</h4>
+                    <p><strong>Continuous Experimentation:</strong></p>
+                    <ul>
+                        <li>Test prompt variant A vs. B on similar queries</li>
+                        <li>Track feedback scores for each variant</li>
+                        <li>Statistical significance testing (Bayesian)</li>
+                        <li>Auto-promote winner to production</li>
+                        <li>Experiment versioning and rollback</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h4>9. Source Citation Scorer</h4>
+                    <p><strong>Learns Source Quality:</strong></p>
+                    <ul>
+                        <li>Track source → answer quality correlation</li>
+                        <li>Boost reliable sources in retrieval</li>
+                        <li>Flag unreliable or outdated sources</li>
+                        <li>Suggest source retirement or updates</li>
+                        <li>Detect contradictory source combinations</li>
                     </ul>
                 </div>
             </div>
         </div>
 
         <!-- SME Workflow -->
-        <div class="section">
+        <div class="section" id="sme-workflow">
             <h2>👨‍🏫 SME Correction Workflow</h2>
 
             <h3>The Review Interface</h3>
@@ -572,309 +1082,396 @@
             <div class="code-block">
 ┌─────────────────────────────────────────────────────────────┐
 │ SME Review Queue - 23 Items Pending                        │
+│ Filter: [All] [High Priority] [My Domain] [Escalated]     │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│ #1 HIGH PRIORITY - 12 negative feedbacks                   │
+│ #1 HIGH PRIORITY - 12 negative feedbacks, 4 similar        │
 │ Question: "How do I reset my password?"                    │
+│ Domain: IT Support | Configuration: Production             │
 │                                                             │
-│ ❌ Current Answer (Rating: 2.1/5)                          │
-│ "To reset your password, contact IT support..."           │
+│ ❌ Current Answer (Rating: 2.1/5, Predicted: 3.5)          │
+│ "To reset your password, contact IT support at            │
+│ support@company.com or call extension 5555."               │
 │                                                             │
-│ 📚 Sources Used:                                           │
-│ [1] IT Support Guide (outdated: 2021)                     │
+│ 📚 Sources Used (Quality Score: 0.45):                     │
+│ [1] IT Support Guide (Last updated: 2021, Freshness: ⚠️)  │
 │                                                             │
 │ 💬 User Feedback (8 comments):                            │
-│ - "There's a self-service portal now"                     │
-│ - "This info is 2 years old"                              │
-│ - "Missing the new SSO process"                           │
+│ 👎 "There's a self-service portal now" (5 users)          │
+│ 👎 "This info is 2 years old"                             │
+│ 👎 "Missing the new SSO process"                          │
+│ 👎 "Portal link: portal.company.com/reset"                │
+│                                                             │
+│ 🧠 Detected Issues:                                        │
+│ • Outdated information (source from 2021)                 │
+│ • Missing self-service option                             │
+│ • SSO flow not mentioned                                  │
+│                                                             │
+│ 🔍 Suggested Sources (from knowledge base):                │
+│ [+] Self-Service Password Reset Guide (2024-10-15)        │
+│ [+] SSO Authentication Policy (2024-08-01)                │
+│ [+] Identity Management FAQ (2024-09-20)                  │
 │                                                             │
 │ ✏️ Your Correction:                                        │
 │ ┌─────────────────────────────────────────────────────┐   │
 │ │ To reset your password:                             │   │
+│ │                                                     │   │
+│ │ **Self-Service Portal (Recommended):**             │   │
 │ │ 1. Go to portal.company.com/reset                   │   │
 │ │ 2. Enter your email and click "Send Reset Link"    │   │
 │ │ 3. Check your email and follow the link            │   │
+│ │ 4. Create a new password (min 12 characters)       │   │
 │ │                                                     │   │
-│ │ Note: SSO users should use their identity provider │   │
+│ │ **SSO Users:**                                      │   │
+│ │ If you use Single Sign-On through Azure/Okta,     │   │
+│ │ reset your password through your identity provider.│   │
+│ │                                                     │   │
+│ │ **Need Help?**                                      │   │
+│ │ Contact IT support: support@company.com, ext 5555  │   │
 │ └─────────────────────────────────────────────────────┘   │
 │                                                             │
-│ 📎 Suggested Sources:                                      │
-│ [+] Add: Self-Service Password Reset Guide (2024)         │
-│ [+] Add: SSO Authentication Policy                        │
-│ [-] Remove: Old IT Support Guide                          │
+│ 📎 Source Updates:                                         │
+│ [✓] Add: Self-Service Password Reset Guide (2024)         │
+│ [✓] Add: SSO Authentication Policy                        │
+│ [✓] Remove: Old IT Support Guide (2021)                   │
 │                                                             │
-│ [Approve & Learn] [Need More Info] [Escalate]            │
+│ 📝 Improvement Notes (internal):                           │
+│ "User feedback provided the portal link. This is a common │
+│ failure - old docs not retired when new self-service       │
+│ portal launched. Recommend auditing all IT support docs." │
+│                                                             │
+│ [✅ Approve & Learn] [📋 Save Draft] [⚠️ Escalate]        │
+│ [🔄 Similar Issues (4)] [📊 View History]                 │
 └─────────────────────────────────────────────────────────────┘
             </div>
 
-            <h3>What Happens After SME Approval</h3>
-            <ol>
-                <li><strong>Immediate</strong>: Corrected answer stored as "golden example"</li>
-                <li><strong>1 hour</strong>: Similar queries automatically get better answers</li>
-                <li><strong>24 hours</strong>: Pattern extracted → Prompt template updated</li>
-                <li><strong>1 week</strong>: Fine-tuning dataset updated with correction</li>
-                <li><strong>1 month</strong>: Knowledge base gaps filled based on patterns</li>
-            </ol>
-        </div>
+            <h3>Post-Approval Workflow</h3>
 
-        <!-- Intelligence Features -->
-        <div class="section">
-            <h2>🧠 Intelligence Features</h2>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                        <strong>Immediate (0-5 minutes)</strong>
+                        <p>Corrected answer stored as "golden example" in fast cache</p>
+                        <ul>
+                            <li>Identical queries get corrected answer instantly</li>
+                            <li>No LLM call needed - direct cache hit</li>
+                            <li>99.9% latency reduction for exact matches</li>
+                        </ul>
+                    </div>
+                </div>
 
-            <h3>1. Predictive Quality Scoring</h3>
-            <p>ML model predicts answer quality BEFORE user sees it:</p>
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                        <strong>Short-Term (1-4 hours)</strong>
+                        <p>Semantic similarity matching kicks in</p>
+                        <ul>
+                            <li>Similar queries (~0.85 cosine similarity) match correction</li>
+                            <li>System blends cached correction with LLM response</li>
+                            <li>Handles paraphrased versions of same question</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                        <strong>Medium-Term (24-48 hours)</strong>
+                        <p>Pattern extracted → Prompt template updated</p>
+                        <ul>
+                            <li>Analysis: "Users asking about password reset need self-service portal info first"</li>
+                            <li>System prompt modified: "Always mention self-service options before support contact"</li>
+                            <li>A/B tested: old prompt vs. new prompt (20/80 split)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-content">
+                        <strong>Medium-Term (1 week)</strong>
+                        <p>Source ranking updated</p>
+                        <ul>
+                            <li>Old IT Support Guide (2021) downweighted in retrieval</li>
+                            <li>Self-Service Password Reset Guide (2024) boosted</li>
+                            <li>Embedding model learns: "password reset" → prioritize self-service docs</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-step-number">5</div>
+                    <div class="flow-step-content">
+                        <strong>Long-Term (1 month)</strong>
+                        <p>Fine-tuning dataset updated with correction</p>
+                        <ul>
+                            <li>Correction added to training set (query + ideal answer + sources)</li>
+                            <li>When 500+ new examples accumulated, trigger fine-tuning job</li>
+                            <li>Fine-tuned model deployed via canary (5% → 25% → 100%)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-step">
+                    <div class="flow-step-number">6</div>
+                    <div class="flow-step-content">
+                        <strong>Long-Term (1-3 months)</strong>
+                        <p>Knowledge base gaps filled</p>
+                        <ul>
+                            <li>System flags: "High failure rate for password/SSO queries"</li>
+                            <li>Recommendation: "Create comprehensive authentication guide"</li>
+                            <li>Content team notified with priority ranking</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Batch Review for Efficiency</h3>
+            <p>When multiple similar issues detected, SMEs can review in batch:</p>
+
             <div class="code-block">
-def predict_response_quality(response, sources, confidence):
-    features = {
-        'source_freshness': avg_age(sources),
-        'source_relevance': semantic_similarity(query, sources),
-        'confidence_calibration': compare(confidence, historical_accuracy),
-        'coverage': doc_coverage(query_entities, source_entities),
-        'contradiction_score': check_source_conflicts(sources)
-    }
+Similar Issues Grouped (4 flagged responses):
 
-    quality_score = ml_model.predict(features)
+1. "How do I reset my password?" - 12 negative feedbacks
+2. "I forgot my password, what do I do?" - 8 negative feedbacks
+3. "Password reset not working" - 6 negative feedbacks
+4. "How to change password" - 4 negative feedbacks
 
-    if quality_score < 0.6:
-        # Flag for pre-emptive review
-        trigger_sme_review()
-        # Or hedge the response
-        add_uncertainty_disclaimer()
+✅ Apply same correction to all 4 issues?
+   This will update 30 total user responses and create
+   4 golden examples for similar future queries.
 
-    return quality_score
-            </div>
-
-            <h3>2. Automated A/B Testing</h3>
-            <p>System continuously experiments with improvements:</p>
-            <ul>
-                <li>Test prompt variant A vs. B on similar queries</li>
-                <li>Track which gets better feedback</li>
-                <li>Auto-promote winner to production</li>
-                <li>Generate hypothesis for next experiment</li>
-            </ul>
-
-            <h3>3. Semantic Clustering of Issues</h3>
-            <p>Groups related problems to find root causes:</p>
-            <div class="highlight-box">
-                <strong>Example Cluster:</strong><br>
-                "Password reset", "Can't login", "Account locked" →
-                <strong>Root Cause:</strong> Missing authentication documentation →
-                <strong>Action:</strong> Create comprehensive auth guide
-            </div>
-
-            <h3>4. Citation Quality Scoring</h3>
-            <p>Learns which sources produce best answers:</p>
-            <ul>
-                <li>Track source → answer quality correlation</li>
-                <li>Boost reliable sources in retrieval</li>
-                <li>Flag unreliable or outdated sources</li>
-                <li>Suggest source retirement or updates</li>
-            </ul>
-        </div>
-
-        <!-- Data Flow -->
-        <div class="section">
-            <h2>🔄 Data Flow & Learning Cycles</h2>
-
-            <h3>Real-Time Learning (Seconds - Minutes)</h3>
-            <div class="flow-step">
-                <div class="flow-step-content">
-                    <strong>Cache Corrected Answers:</strong> Store SME corrections in fast cache → Reuse for identical queries
-                </div>
-            </div>
-
-            <h3>Short-Term Learning (Hours - Days)</h3>
-            <div class="flow-step">
-                <div class="flow-step-content">
-                    <strong>Prompt Optimization:</strong> Extract patterns → Update system prompts → A/B test changes
-                </div>
-            </div>
-
-            <h3>Medium-Term Learning (Weeks)</h3>
-            <div class="flow-step">
-                <div class="flow-step-content">
-                    <strong>Retrieval Tuning:</strong> Analyze which sources worked → Adjust embedding weights → Re-rank results
-                </div>
-            </div>
-
-            <h3>Long-Term Learning (Months)</h3>
-            <div class="flow-step">
-                <div class="flow-step-content">
-                    <strong>Model Fine-Tuning:</strong> Accumulate golden examples → Fine-tune LLM → Deploy improved model
-                </div>
+   [Apply to All] [Review Individually]
             </div>
         </div>
 
-        <!-- Technical Implementation -->
-        <div class="section">
+        <!-- Implementation Plan -->
+        <div class="section" id="implementation">
             <h2>⚙️ Technical Implementation Plan</h2>
 
-            <h3>Phase 1: Foundation (Weeks 1-4)</h3>
+            <h3>Phase 1: Foundation (Weeks 1-6)</h3>
             <div class="timeline">
                 <div class="timeline-item">
-                    <h4>Week 1: Enhanced Feedback Collection</h4>
+                    <h4>Week 1-2: Enhanced Feedback Collection</h4>
                     <ul>
-                        <li>Add issue type tags to feedback form</li>
-                        <li>Implement "suggest better answer" feature</li>
-                        <li>Create feedback analytics database schema</li>
-                        <li>Build basic feedback dashboard</li>
+                        <li>Create FeedbackModal.tsx with issue type tags</li>
+                        <li>Implement "suggest better answer" rich text editor</li>
+                        <li>Extend feedback database schema (issue_types, suggested_answer, severity)</li>
+                        <li>Build basic feedback analytics dashboard</li>
+                        <li>Add feedback API endpoints with validation</li>
                     </ul>
                     <div class="tech-stack">
-                        <span class="tech-badge">React</span>
+                        <span class="tech-badge">React 18</span>
+                        <span class="tech-badge">TypeScript</span>
                         <span class="tech-badge">PostgreSQL</span>
                         <span class="tech-badge">FastAPI</span>
+                        <span class="tech-badge">Pydantic</span>
                     </div>
                 </div>
 
                 <div class="timeline-item">
-                    <h4>Week 2: Anomaly Detection</h4>
+                    <h4>Week 3-4: Golden Dataset & Testing Infrastructure</h4>
                     <ul>
-                        <li>Implement rating-based flagging</li>
-                        <li>Build feedback clustering algorithm</li>
-                        <li>Create auto-flagging rules engine</li>
-                        <li>Setup alerting system</li>
+                        <li>Mine 200-500 representative queries from production logs</li>
+                        <li>Build SME golden dataset creation interface</li>
+                        <li>Implement automated testing pipeline (benchmark runner)</li>
+                        <li>Create evaluation functions (semantic similarity, source overlap, etc.)</li>
+                        <li>Setup continuous benchmarking job (every 6 hours)</li>
+                        <li>Build quality metrics dashboard</li>
                     </ul>
                     <div class="tech-stack">
+                        <span class="tech-badge">sentence-transformers</span>
                         <span class="tech-badge">scikit-learn</span>
-                        <span class="tech-badge">HDBSCAN</span>
                         <span class="tech-badge">Celery</span>
+                        <span class="tech-badge">Redis</span>
                     </div>
                 </div>
 
                 <div class="timeline-item">
-                    <h4>Week 3: SME Dashboard</h4>
+                    <h4>Week 5-6: Anomaly Detection</h4>
                     <ul>
-                        <li>Build review queue interface</li>
-                        <li>Create correction editor</li>
-                        <li>Implement approval workflow</li>
-                        <li>Add correction history tracking</li>
+                        <li>Implement rating-based flagging (statistical thresholds)</li>
+                        <li>Build feedback clustering algorithm (HDBSCAN)</li>
+                        <li>Create confidence-accuracy mismatch detector</li>
+                        <li>Implement NLI-based hallucination detection</li>
+                        <li>Setup alerting system (Slack/email)</li>
+                        <li>Build anomaly detection dashboard</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-badge">HDBSCAN</span>
+                        <span class="tech-badge">NLI Models</span>
+                        <span class="tech-badge">Statsmodels</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Phase 2: SME Workflow & Intelligence (Weeks 7-12)</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Week 7-8: SME Dashboard</h4>
+                    <ul>
+                        <li>Build review queue interface with priority sorting</li>
+                        <li>Create correction editor with markdown and diff view</li>
+                        <li>Implement source suggestion widget</li>
+                        <li>Add batch review functionality</li>
+                        <li>Build approval workflow (pending → approved → applied)</li>
+                        <li>Create correction history tracking</li>
                     </ul>
                     <div class="tech-stack">
                         <span class="tech-badge">React Admin</span>
-                        <span class="tech-badge">Diff Library</span>
+                        <span class="tech-badge">react-diff-viewer</span>
                         <span class="tech-badge">RBAC</span>
                     </div>
                 </div>
 
                 <div class="timeline-item">
-                    <h4>Week 4: Correction Storage & Retrieval</h4>
+                    <h4>Week 9-10: Correction Storage & Retrieval</h4>
                     <ul>
-                        <li>Design golden examples schema</li>
-                        <li>Build correction cache system</li>
-                        <li>Implement similarity matching</li>
-                        <li>Create fallback logic</li>
+                        <li>Design golden examples database schema</li>
+                        <li>Build correction cache system (Redis + vector DB)</li>
+                        <li>Implement semantic similarity matching (cosine &gt; 0.85)</li>
+                        <li>Create fallback logic for cache misses</li>
+                        <li>Add cache warming on deployment</li>
+                        <li>Build cache hit rate monitoring</li>
                     </ul>
                     <div class="tech-stack">
                         <span class="tech-badge">Redis</span>
-                        <span class="tech-badge">Vector DB</span>
+                        <span class="tech-badge">Pinecone/Weaviate</span>
                         <span class="tech-badge">Semantic Search</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>Week 11-12: Quality Prediction Model</h4>
+                    <ul>
+                        <li>Extract training features (source freshness, relevance, coverage, etc.)</li>
+                        <li>Train quality classifier (LightGBM)</li>
+                        <li>Implement pre-flight quality scoring</li>
+                        <li>Build confidence calibration</li>
+                        <li>Setup model retraining pipeline (weekly)</li>
+                        <li>Create model performance dashboard</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-badge">LightGBM</span>
+                        <span class="tech-badge">MLflow</span>
+                        <span class="tech-badge">Feature Engineering</span>
                     </div>
                 </div>
             </div>
 
-            <h3>Phase 2: Intelligence (Weeks 5-8)</h3>
+            <h3>Phase 3: Automation & Learning (Weeks 13-18)</h3>
             <div class="timeline">
                 <div class="timeline-item">
-                    <h4>Week 5: Pattern Analysis Engine</h4>
+                    <h4>Week 13-14: Pattern Analysis Engine</h4>
                     <ul>
-                        <li>Build failure pattern detector</li>
-                        <li>Implement topic clustering</li>
-                        <li>Create trend analysis</li>
+                        <li>Build failure pattern detector (topic clustering)</li>
+                        <li>Implement knowledge gap analyzer</li>
+                        <li>Create trend analysis (temporal patterns)</li>
                         <li>Generate improvement suggestions</li>
+                        <li>Build pattern visualization dashboard</li>
                     </ul>
                     <div class="tech-stack">
-                        <span class="tech-badge">NLP</span>
                         <span class="tech-badge">Topic Modeling</span>
-                        <span class="tech-badge">Time Series</span>
+                        <span class="tech-badge">Time Series Analysis</span>
+                        <span class="tech-badge">Knowledge Graphs</span>
                     </div>
                 </div>
 
                 <div class="timeline-item">
-                    <h4>Week 6: Quality Prediction Model</h4>
+                    <h4>Week 15-16: A/B Testing Framework</h4>
                     <ul>
-                        <li>Extract training features</li>
-                        <li>Train quality classifier</li>
-                        <li>Implement pre-flight scoring</li>
-                        <li>Build confidence calibration</li>
+                        <li>Create experiment tracking database</li>
+                        <li>Implement variant routing (feature flags)</li>
+                        <li>Build Bayesian statistical testing</li>
+                        <li>Create auto-promotion logic (winner detection)</li>
+                        <li>Setup experiment dashboard</li>
+                        <li>Add rollback mechanism</li>
                     </ul>
                     <div class="tech-stack">
-                        <span class="tech-badge">LightGBM</span>
-                        <span class="tech-badge">Feature Engineering</span>
-                        <span class="tech-badge">MLflow</span>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <h4>Week 7: A/B Testing Framework</h4>
-                    <ul>
-                        <li>Create experiment tracking</li>
-                        <li>Implement variant routing</li>
-                        <li>Build statistical testing</li>
-                        <li>Auto-promotion logic</li>
-                    </ul>
-                    <div class="tech-stack">
-                        <span class="tech-badge">Statsmodels</span>
-                        <span class="tech-badge">Feature Flags</span>
+                        <span class="tech-badge">Bayesian Stats</span>
+                        <span class="tech-badge">Feature Flags (LaunchDarkly/Unleash)</span>
                         <span class="tech-badge">Analytics</span>
                     </div>
                 </div>
 
                 <div class="timeline-item">
-                    <h4>Week 8: Knowledge Gap Analyzer</h4>
+                    <h4>Week 17-18: Prompt Evolution Engine</h4>
                     <ul>
-                        <li>Identify missing topics</li>
-                        <li>Rank content priorities</li>
-                        <li>Generate content suggestions</li>
-                        <li>Track documentation coverage</li>
+                        <li>Extract winning prompt patterns from corrections</li>
+                        <li>Implement prompt templating system</li>
+                        <li>Build version control for prompts</li>
+                        <li>Create A/B test orchestration for prompts</li>
+                        <li>Add prompt performance monitoring</li>
                     </ul>
                     <div class="tech-stack">
-                        <span class="tech-badge">Knowledge Graphs</span>
-                        <span class="tech-badge">Entity Extraction</span>
-                        <span class="tech-badge">Gap Analysis</span>
+                        <span class="tech-badge">Prompt Engineering</span>
+                        <span class="tech-badge">Template Engines</span>
+                        <span class="tech-badge">Git-based Versioning</span>
                     </div>
                 </div>
             </div>
 
-            <h3>Phase 3: Automation (Weeks 9-12)</h3>
+            <h3>Phase 4: Advanced Optimization (Weeks 19-24)</h3>
             <div class="timeline">
                 <div class="timeline-item">
-                    <h4>Week 9: Prompt Evolution Engine</h4>
+                    <h4>Week 19-20: Retrieval Optimization</h4>
                     <ul>
-                        <li>Extract winning prompt patterns</li>
-                        <li>Implement prompt templating</li>
-                        <li>Build version control</li>
-                        <li>Create rollback mechanism</li>
+                        <li>Track source → answer quality correlation</li>
+                        <li>Implement dynamic re-ranking based on feedback</li>
+                        <li>Build embedding fine-tuning (contrastive learning)</li>
+                        <li>Create feedback-driven retrieval weights</li>
+                        <li>Add source quality scoring dashboard</li>
                     </ul>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Contrastive Learning</span>
+                        <span class="tech-badge">Learning to Rank</span>
+                        <span class="tech-badge">Vector DB Optimization</span>
+                    </div>
                 </div>
 
                 <div class="timeline-item">
-                    <h4>Week 10: Retrieval Optimization</h4>
+                    <h4>Week 21-22: Fine-Tuning Pipeline</h4>
                     <ul>
-                        <li>Track source performance</li>
-                        <li>Implement dynamic re-ranking</li>
-                        <li>Build embedding fine-tuning</li>
-                        <li>Create feedback-driven weights</li>
-                    </ul>
-                </div>
-
-                <div class="timeline-item">
-                    <h4>Week 11: Fine-Tuning Pipeline</h4>
-                    <ul>
-                        <li>Build training data formatter</li>
-                        <li>Create fine-tuning orchestration</li>
+                        <li>Build training data formatter (conversational format)</li>
+                        <li>Create fine-tuning orchestration (OpenAI API / custom)</li>
                         <li>Implement model versioning</li>
-                        <li>Setup A/B deployment</li>
+                        <li>Setup canary deployment (5% → 25% → 50% → 100%)</li>
+                        <li>Build model comparison dashboard</li>
+                        <li>Add automatic rollback on quality degradation</li>
                     </ul>
+                    <div class="tech-stack">
+                        <span class="tech-badge">OpenAI Fine-tuning API</span>
+                        <span class="tech-badge">Model Versioning</span>
+                        <span class="tech-badge">Canary Deployment</span>
+                    </div>
                 </div>
 
                 <div class="timeline-item">
-                    <h4>Week 12: Monitoring & Dashboards</h4>
+                    <h4>Week 23-24: Monitoring & Dashboards</h4>
                     <ul>
-                        <li>Build improvement metrics dashboard</li>
-                        <li>Create alerting system</li>
-                        <li>Implement ROI tracking</li>
-                        <li>Generate executive reports</li>
+                        <li>Build comprehensive efficiency metrics dashboard</li>
+                        <li>Create system improvement tracking</li>
+                        <li>Implement anomaly alerting</li>
+                        <li>Setup weekly/monthly reports</li>
+                        <li>Add cost tracking (LLM calls, storage)</li>
+                        <li>Create executive summary generator</li>
                     </ul>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Grafana/Metabase</span>
+                        <span class="tech-badge">Prometheus</span>
+                        <span class="tech-badge">Reporting Tools</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -887,158 +1484,181 @@ def predict_response_quality(response, sources, confidence):
 -- Enhanced Feedback Table
 CREATE TABLE enhanced_feedback (
     id UUID PRIMARY KEY,
-    feedback_id UUID REFERENCES feedback(id),
-    issue_types TEXT[] DEFAULT '{}',  -- ['wrong_answer', 'missing_info', 'outdated']
+    feedback_id UUID REFERENCES feedback(id) ON DELETE CASCADE,
+    issue_types TEXT[] DEFAULT '{}',  -- ['wrong_answer', 'missing_info', 'outdated', 'bad_source']
     suggested_answer TEXT,
-    severity INT DEFAULT 1,  -- 1-5 scale
+    severity INT DEFAULT 1,  -- 1-5 scale (auto-calculated from negative feedback volume)
     auto_flagged BOOLEAN DEFAULT FALSE,
-    flag_reason TEXT,
-    created_at TIMESTAMP DEFAULT NOW()
+    flag_reason TEXT,  -- Why this was flagged (e.g., "Rating cluster < 60%", "Confidence mismatch")
+    cluster_id UUID,  -- Groups similar issues together
+    created_at TIMESTAMP DEFAULT NOW(),
+    INDEX idx_auto_flagged (auto_flagged, severity DESC),
+    INDEX idx_cluster (cluster_id)
 );
 
 -- SME Corrections Table
 CREATE TABLE sme_corrections (
     id UUID PRIMARY KEY,
-    message_id UUID REFERENCES messages(id),
+    message_id UUID REFERENCES messages(id) ON DELETE CASCADE,
     feedback_id UUID REFERENCES feedback(id),
     sme_user_id UUID REFERENCES users(id),
     original_answer TEXT NOT NULL,
     corrected_answer TEXT NOT NULL,
-    correction_type VARCHAR(50),  -- 'factual', 'formatting', 'sources', 'tone'
-    sources_added JSONB DEFAULT '[]',
-    sources_removed JSONB DEFAULT '[]',
-    improvement_notes TEXT,
-    status VARCHAR(20) DEFAULT 'pending',  -- pending, approved, rejected
+    correction_type VARCHAR(50),  -- 'factual', 'formatting', 'sources', 'tone', 'completeness'
+    sources_added JSONB DEFAULT '[]',  -- [{source_id, reason_added}]
+    sources_removed JSONB DEFAULT '[]',  -- [{source_id, reason_removed}]
+    improvement_notes TEXT,  -- Internal notes for pattern analysis
+    status VARCHAR(20) DEFAULT 'pending',  -- pending, approved, rejected, applied
     applied_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT NOW()
+    impact_score FLOAT,  -- Estimated impact (how many users affected)
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    INDEX idx_status (status, created_at DESC),
+    INDEX idx_sme_user (sme_user_id, created_at DESC)
 );
 
--- Golden Examples (for fine-tuning)
+-- Golden Examples (for caching and fine-tuning)
 CREATE TABLE golden_examples (
     id UUID PRIMARY KEY,
     query TEXT NOT NULL,
+    query_embedding VECTOR(1536),  -- For semantic similarity matching
     ideal_answer TEXT NOT NULL,
-    sources JSONB NOT NULL,
+    sources JSONB NOT NULL,  -- [{id, chunk_text, score}]
     correction_id UUID REFERENCES sme_corrections(id),
+    configuration_id UUID REFERENCES configurations(id),
     domain_id UUID REFERENCES domains(id),
-    quality_score FLOAT DEFAULT 1.0,
-    usage_count INT DEFAULT 0,
+    quality_score FLOAT DEFAULT 1.0,  -- SME rating or predicted quality
+    usage_count INT DEFAULT 0,  -- How many times this cache entry was used
+    cache_hit_rate FLOAT DEFAULT 0.0,  -- % of similar queries that matched this
     created_at TIMESTAMP DEFAULT NOW(),
-    last_used_at TIMESTAMP
+    last_used_at TIMESTAMP,
+    expires_at TIMESTAMP,  -- Optional expiration for time-sensitive info
+    INDEX idx_query_embedding USING ivfflat (query_embedding vector_cosine_ops),
+    INDEX idx_configuration (configuration_id, created_at DESC),
+    INDEX idx_usage (usage_count DESC)
 );
 
 -- Pattern Analysis Results
 CREATE TABLE detected_patterns (
     id UUID PRIMARY KEY,
-    pattern_type VARCHAR(50),  -- 'failure_mode', 'knowledge_gap', 'source_issue'
-    description TEXT,
-    affected_queries_count INT,
-    example_queries TEXT[],
-    suggested_fix TEXT,
-    priority INT DEFAULT 1,
-    status VARCHAR(20) DEFAULT 'new',
+    pattern_type VARCHAR(50),  -- 'failure_mode', 'knowledge_gap', 'source_issue', 'prompt_improvement'
+    title VARCHAR(200),  -- Human-readable pattern name
+    description TEXT,  -- Detailed explanation
+    affected_queries_count INT,  -- How many queries exhibit this pattern
+    affected_users_count INT,  -- Unique users impacted
+    example_queries TEXT[],  -- Sample queries showing the pattern
+    example_feedback_ids UUID[],  -- Sample feedback records
+    suggested_fix TEXT,  -- Recommended action
+    fix_type VARCHAR(50),  -- 'prompt', 'retrieval', 'content', 'model'
+    priority INT DEFAULT 1,  -- 1-5 priority score
+    status VARCHAR(20) DEFAULT 'new',  -- new, acknowledged, in_progress, resolved, dismissed
+    confidence_score FLOAT,  -- 0-1 confidence in pattern detection
     created_at TIMESTAMP DEFAULT NOW(),
-    resolved_at TIMESTAMP
+    resolved_at TIMESTAMP,
+    resolution_notes TEXT,
+    INDEX idx_status_priority (status, priority DESC),
+    INDEX idx_pattern_type (pattern_type, created_at DESC)
 );
 
 -- A/B Experiments
 CREATE TABLE experiments (
     id UUID PRIMARY KEY,
-    experiment_type VARCHAR(50),  -- 'prompt', 'retrieval', 'model'
-    variant_a JSONB NOT NULL,
-    variant_b JSONB NOT NULL,
+    name VARCHAR(200),
+    description TEXT,
+    experiment_type VARCHAR(50),  -- 'prompt', 'retrieval', 'model', 'source_ranking'
+    variant_a JSONB NOT NULL,  -- Configuration for variant A (baseline)
+    variant_b JSONB NOT NULL,  -- Configuration for variant B (test)
+    traffic_split FLOAT DEFAULT 0.5,  -- % traffic to variant B (0.0 - 1.0)
     start_date TIMESTAMP DEFAULT NOW(),
     end_date TIMESTAMP,
-    status VARCHAR(20) DEFAULT 'running',
-    winner VARCHAR(10),  -- 'a', 'b', 'inconclusive'
-    confidence_level FLOAT,
-    metrics JSONB
+    status VARCHAR(20) DEFAULT 'running',  -- draft, running, paused, completed
+    winner VARCHAR(10),  -- 'a', 'b', 'inconclusive', 'no_difference'
+    confidence_level FLOAT,  -- Bayesian confidence in winner
+    metrics JSONB,  -- {avg_rating_a, avg_rating_b, sample_size_a, sample_size_b, p_value}
+    created_by UUID REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT NOW(),
+    INDEX idx_status (status, start_date DESC)
 );
 
--- Quality Predictions
+-- Experiment Results (detailed tracking)
+CREATE TABLE experiment_results (
+    id UUID PRIMARY KEY,
+    experiment_id UUID REFERENCES experiments(id) ON DELETE CASCADE,
+    message_id UUID REFERENCES messages(id),
+    variant VARCHAR(10),  -- 'a' or 'b'
+    user_rating INT,  -- Actual user rating (1-5 or up/down converted)
+    response_time_ms INT,
+    quality_prediction FLOAT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    INDEX idx_experiment_variant (experiment_id, variant)
+);
+
+-- Quality Predictions (for model performance tracking)
 CREATE TABLE quality_predictions (
     id UUID PRIMARY KEY,
-    message_id UUID REFERENCES messages(id),
-    predicted_quality FLOAT,
-    actual_rating FLOAT,
-    features JSONB,
+    message_id UUID REFERENCES messages(id) ON DELETE CASCADE,
+    predicted_quality FLOAT,  -- 0-1 score
+    actual_rating FLOAT,  -- User feedback converted to 0-1
+    prediction_error FLOAT,  -- abs(predicted - actual)
+    features JSONB,  -- {source_freshness, relevance, coverage, etc.}
     model_version VARCHAR(50),
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
+    INDEX idx_model_version (model_version, created_at DESC),
+    INDEX idx_prediction_error (prediction_error DESC)
+);
+
+-- Source Quality Tracking
+CREATE TABLE source_quality_scores (
+    id UUID PRIMARY KEY,
+    source_id VARCHAR(500),  -- Document/chunk identifier
+    configuration_id UUID REFERENCES configurations(id),
+    times_retrieved INT DEFAULT 0,
+    times_in_good_response INT DEFAULT 0,  -- # times in response with positive feedback
+    times_in_bad_response INT DEFAULT 0,  -- # times in response with negative feedback
+    quality_score FLOAT,  -- calculated: good / (good + bad)
+    freshness_score FLOAT,  -- based on document age
+    avg_user_rating FLOAT,  -- average rating when this source was used
+    last_updated TIMESTAMP DEFAULT NOW(),
+    created_at TIMESTAMP DEFAULT NOW(),
+    INDEX idx_configuration_quality (configuration_id, quality_score DESC),
+    INDEX idx_source_id (source_id)
+);
+
+-- Knowledge Gap Tracking
+CREATE TABLE knowledge_gaps (
+    id UUID PRIMARY KEY,
+    topic VARCHAR(200),  -- Extracted topic (e.g., "password reset", "SSO authentication")
+    domain_id UUID REFERENCES domains(id),
+    configuration_id UUID REFERENCES configurations(id),
+    query_count INT DEFAULT 0,  -- # queries about this topic
+    failure_rate FLOAT,  -- % with negative feedback
+    missing_sources BOOLEAN DEFAULT FALSE,  -- No good sources found
+    outdated_sources BOOLEAN DEFAULT FALSE,  -- Only old sources available
+    priority_score FLOAT,  -- Calculated: query_count * failure_rate
+    recommended_action TEXT,  -- e.g., "Create new documentation on X"
+    status VARCHAR(20) DEFAULT 'open',  -- open, in_progress, resolved
+    created_at TIMESTAMP DEFAULT NOW(),
+    resolved_at TIMESTAMP,
+    INDEX idx_priority (priority_score DESC),
+    INDEX idx_domain (domain_id, status)
 );
             </div>
         </div>
 
-        <!-- API Endpoints -->
-        <div class="section">
-            <h2>🔌 New API Endpoints</h2>
+        <!-- Efficiency Metrics -->
+        <div class="section" id="metrics">
+            <h2>📈 Efficiency Metrics & Measurement</h2>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Endpoint</th>
-                        <th>Method</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>/api/v1/feedback/enhanced</td>
-                        <td>POST</td>
-                        <td>Submit detailed feedback with issue types</td>
-                    </tr>
-                    <tr>
-                        <td>/api/v1/sme/review-queue</td>
-                        <td>GET</td>
-                        <td>Get prioritized list of items needing review</td>
-                    </tr>
-                    <tr>
-                        <td>/api/v1/sme/corrections</td>
-                        <td>POST</td>
-                        <td>Submit SME correction</td>
-                    </tr>
-                    <tr>
-                        <td>/api/v1/analytics/patterns</td>
-                        <td>GET</td>
-                        <td>Get detected failure patterns</td>
-                    </tr>
-                    <tr>
-                        <td>/api/v1/analytics/knowledge-gaps</td>
-                        <td>GET</td>
-                        <td>Get identified knowledge gaps</td>
-                    </tr>
-                    <tr>
-                        <td>/api/v1/experiments</td>
-                        <td>GET/POST</td>
-                        <td>Manage A/B experiments</td>
-                    </tr>
-                    <tr>
-                        <td>/api/v1/quality/predict</td>
-                        <td>POST</td>
-                        <td>Get quality prediction for response</td>
-                    </tr>
-                    <tr>
-                        <td>/api/v1/admin/improvement-metrics</td>
-                        <td>GET</td>
-                        <td>Get system improvement metrics</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Success Metrics -->
-        <div class="section">
-            <h2>📈 Success Metrics & KPIs</h2>
-
-            <h3>Primary Metrics</h3>
+            <h3>Primary Efficiency Indicators</h3>
             <div class="value-prop">
                 <div class="metric-card">
-                    <div class="metric-label">Response Quality Score</div>
-                    <div class="metric-value">↑ 85%</div>
-                    <p>Target: From 70% → 95% satisfaction</p>
+                    <div class="metric-label">Response Quality</div>
+                    <div class="metric-value">↑ 35%</div>
+                    <p>Target: 70% → 95% user satisfaction</p>
                 </div>
 
                 <div class="metric-card">
-                    <div class="metric-label">SME Time Savings</div>
+                    <div class="metric-label">SME Review Time</div>
                     <div class="metric-value">↓ 80%</div>
                     <p>Target: 100hrs → 20hrs per month</p>
                 </div>
@@ -1046,17 +1666,17 @@ CREATE TABLE quality_predictions (
                 <div class="metric-card">
                     <div class="metric-label">Repeat Issue Rate</div>
                     <div class="metric-value">↓ 90%</div>
-                    <p>Target: From 40% → 4% recurrence</p>
+                    <p>Target: 40% → 4% recurrence</p>
                 </div>
 
                 <div class="metric-card">
                     <div class="metric-label">Auto-Fix Rate</div>
                     <div class="metric-value">↑ 75%</div>
-                    <p>Target: 75% of issues auto-fixed</p>
+                    <p>Target: 75% of issues auto-resolved</p>
                 </div>
             </div>
 
-            <h3>Tracking Dashboard</h3>
+            <h3>Detailed Efficiency Tracking</h3>
             <table>
                 <thead>
                     <tr>
@@ -1065,6 +1685,7 @@ CREATE TABLE quality_predictions (
                         <th>Month 1</th>
                         <th>Month 3</th>
                         <th>Month 6</th>
+                        <th>Measurement Method</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1074,6 +1695,15 @@ CREATE TABLE quality_predictions (
                         <td>75%</td>
                         <td>85%</td>
                         <td>95%</td>
+                        <td>User positive feedback rate</td>
+                    </tr>
+                    <tr>
+                        <td>Golden Dataset Pass Rate</td>
+                        <td>65%</td>
+                        <td>72%</td>
+                        <td>85%</td>
+                        <td>92%</td>
+                        <td>% tests passing automated benchmark</td>
                     </tr>
                     <tr>
                         <td>Negative Feedback Rate</td>
@@ -1081,6 +1711,7 @@ CREATE TABLE quality_predictions (
                         <td>25%</td>
                         <td>15%</td>
                         <td>5%</td>
+                        <td>% thumbs down / total feedback</td>
                     </tr>
                     <tr>
                         <td>Knowledge Gap Count</td>
@@ -1088,6 +1719,7 @@ CREATE TABLE quality_predictions (
                         <td>120</td>
                         <td>60</td>
                         <td>20</td>
+                        <td>Identified topics with &gt;10% failure rate</td>
                     </tr>
                     <tr>
                         <td>SME Review Time (hrs/month)</td>
@@ -1095,6 +1727,7 @@ CREATE TABLE quality_predictions (
                         <td>80</td>
                         <td>40</td>
                         <td>20</td>
+                        <td>Tracked time in SME dashboard</td>
                     </tr>
                     <tr>
                         <td>Auto-improvement Actions</td>
@@ -1102,52 +1735,98 @@ CREATE TABLE quality_predictions (
                         <td>50</td>
                         <td>200</td>
                         <td>500</td>
+                        <td>Count of automated fixes deployed</td>
                     </tr>
                     <tr>
-                        <td>Response Time (avg)</td>
+                        <td>Response Time (p95)</td>
                         <td>2.5s</td>
                         <td>2.3s</td>
                         <td>1.8s</td>
                         <td>1.5s</td>
+                        <td>95th percentile latency</td>
+                    </tr>
+                    <tr>
+                        <td>Cache Hit Rate</td>
+                        <td>0%</td>
+                        <td>15%</td>
+                        <td>35%</td>
+                        <td>45%</td>
+                        <td>% queries answered from cache</td>
+                    </tr>
+                    <tr>
+                        <td>Source Quality Score</td>
+                        <td>0.60</td>
+                        <td>0.65</td>
+                        <td>0.75</td>
+                        <td>0.85</td>
+                        <td>Avg correlation: source usage → good feedback</td>
+                    </tr>
+                    <tr>
+                        <td>Hallucination Rate</td>
+                        <td>5%</td>
+                        <td>4%</td>
+                        <td>2%</td>
+                        <td>&lt;1%</td>
+                        <td>NLI-detected contradictions</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Value Metrics (User Impact)</h3>
+            <ul>
+                <li><strong>User Productivity:</strong> Time saved per query (faster, more accurate answers)</li>
+                <li><strong>Task Completion Rate:</strong> % of users who got their question answered without escalation</li>
+                <li><strong>Conversation Length:</strong> Avg messages per conversation (shorter = more efficient)</li>
+                <li><strong>Follow-up Rate:</strong> % of users who ask clarifying questions (lower = better initial answer)</li>
+                <li><strong>Escalation Rate:</strong> % of queries that require human support (target: &lt;5%)</li>
+            </ul>
+
+            <h3>System Health Metrics</h3>
+            <ul>
+                <li><strong>Quality Prediction Accuracy:</strong> RMSE between predicted and actual quality</li>
+                <li><strong>A/B Test Win Rate:</strong> % of experiments showing statistically significant improvement</li>
+                <li><strong>Pattern Detection Precision:</strong> % of flagged patterns confirmed by SME review</li>
+                <li><strong>Model Drift:</strong> Quality degradation over time without retraining</li>
+                <li><strong>Infrastructure Cost Efficiency:</strong> Cost per query (LLM tokens + storage + compute)</li>
+            </ul>
+
+            <h3>Continuous Improvement Velocity</h3>
+            <p>Measure how fast the system learns:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Improvement Type</th>
+                        <th>Baseline Speed</th>
+                        <th>Target Speed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cache deployment (identical queries)</td>
+                        <td>Manual (days)</td>
+                        <td>&lt;5 minutes (automated)</td>
+                    </tr>
+                    <tr>
+                        <td>Prompt update (similar queries)</td>
+                        <td>Manual (weeks)</td>
+                        <td>&lt;48 hours (automated A/B)</td>
+                    </tr>
+                    <tr>
+                        <td>Retrieval optimization</td>
+                        <td>Manual (months)</td>
+                        <td>&lt;1 week (automated reweighting)</td>
+                    </tr>
+                    <tr>
+                        <td>Model fine-tuning</td>
+                        <td>Manual (quarters)</td>
+                        <td>&lt;1 month (automated pipeline)</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- ROI Analysis -->
-        <div class="section">
-            <h2>💰 ROI Analysis</h2>
-
-            <h3>Costs</h3>
-            <ul>
-                <li><strong>Development:</strong> 12 weeks × 2 developers = ~$100k</li>
-                <li><strong>Infrastructure:</strong> ML models, storage = ~$500/month</li>
-                <li><strong>Maintenance:</strong> ~10hrs/week = ~$5k/month</li>
-            </ul>
-
-            <h3>Benefits (Annual)</h3>
-            <ul>
-                <li><strong>SME Time Savings:</strong> 80hrs/month × $100/hr × 12 = $96k/year</li>
-                <li><strong>Reduced Support Tickets:</strong> 30% fewer escalations = $50k/year</li>
-                <li><strong>Improved User Productivity:</strong> Better answers = $200k/year value</li>
-                <li><strong>Faster Content Iteration:</strong> Auto-identified gaps = $30k/year</li>
-            </ul>
-
-            <div class="highlight-box">
-                <strong>Net ROI Year 1:</strong> $376k benefits - $166k costs = <strong style="color: green; font-size: 1.2em;">$210k net gain (127% ROI)</strong>
-            </div>
-
-            <h3>Compound Benefits</h3>
-            <p>As the system learns, benefits compound:</p>
-            <ul>
-                <li><strong>Year 2:</strong> 40% fewer issues to review → Additional $50k savings</li>
-                <li><strong>Year 3:</strong> 60% auto-resolution rate → Additional $80k savings</li>
-                <li><strong>Year 4+:</strong> System runs mostly autonomously, continuous improvement</li>
-            </ul>
-        </div>
-
-        <!-- Risk Mitigation -->
-        <div class="section">
+        <!-- Risks & Mitigation -->
+        <div class="section" id="risks">
             <h2>⚠️ Risks & Mitigation</h2>
 
             <table>
@@ -1155,102 +1834,141 @@ CREATE TABLE quality_predictions (
                     <tr>
                         <th>Risk</th>
                         <th>Impact</th>
-                        <th>Mitigation</th>
+                        <th>Probability</th>
+                        <th>Mitigation Strategy</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>SME corrections introduce bias</td>
+                        <td>SME corrections introduce bias or errors</td>
+                        <td>High</td>
                         <td>Medium</td>
-                        <td>Multi-SME review, version control, rollback capability</td>
+                        <td>
+                            • Multi-SME review for critical topics<br>
+                            • Version control with rollback capability<br>
+                            • Golden dataset validation before deployment<br>
+                            • Peer review for high-impact corrections
+                        </td>
                     </tr>
                     <tr>
                         <td>Auto-improvements degrade quality</td>
                         <td>High</td>
-                        <td>A/B testing before production, confidence thresholds, human approval gates</td>
+                        <td>Medium</td>
+                        <td>
+                            • A/B testing before production deployment<br>
+                            • Statistical significance thresholds<br>
+                            • Human approval gates for major changes<br>
+                            • Canary deployment (gradual rollout)<br>
+                            • Automatic rollback on quality metrics drop
+                        </td>
                     </tr>
                     <tr>
                         <td>Feedback gaming (users abuse system)</td>
                         <td>Low</td>
-                        <td>Anomaly detection, feedback validation, rate limiting</td>
+                        <td>Low</td>
+                        <td>
+                            • Anomaly detection for unusual feedback patterns<br>
+                            • Rate limiting per user<br>
+                            • Feedback validation (duplicate detection)<br>
+                            • SME review of suspicious patterns
+                        </td>
                     </tr>
                     <tr>
                         <td>ML model drift over time</td>
                         <td>Medium</td>
-                        <td>Continuous monitoring, periodic retraining, performance alerts</td>
+                        <td>High</td>
+                        <td>
+                            • Continuous monitoring with alerts<br>
+                            • Weekly automated retraining<br>
+                            • Performance degradation alerts<br>
+                            • Regular golden dataset updates
+                        </td>
                     </tr>
                     <tr>
                         <td>Privacy/compliance with feedback data</td>
                         <td>High</td>
-                        <td>PII scrubbing, data retention policies, audit logs</td>
+                        <td>Low</td>
+                        <td>
+                            • PII scrubbing in feedback collection<br>
+                            • Data retention policies (90-day limit)<br>
+                            • Audit logs for all data access<br>
+                            • User consent for feedback usage<br>
+                            • GDPR/compliance review
+                        </td>
                     </tr>
                     <tr>
                         <td>System learns incorrect patterns</td>
                         <td>Medium</td>
-                        <td>SME oversight, confidence scoring, pattern validation</td>
+                        <td>Medium</td>
+                        <td>
+                            • SME oversight on pattern detection<br>
+                            • Confidence scoring (don't act on low-confidence)<br>
+                            • Pattern validation before automation<br>
+                            • Regular pattern review sessions
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cache poisoning (bad answers cached)</td>
+                        <td>Medium</td>
+                        <td>Low</td>
+                        <td>
+                            • Only cache SME-approved corrections<br>
+                            • Cache expiration for time-sensitive info<br>
+                            • User feedback on cached responses monitored<br>
+                            • Cache invalidation on negative feedback
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Infrastructure cost explosion</td>
+                        <td>Medium</td>
+                        <td>Medium</td>
+                        <td>
+                            • Cost tracking and alerts<br>
+                            • Caching reduces LLM calls (45% cache hit = 45% cost reduction)<br>
+                            • Batch processing for non-urgent tasks<br>
+                            • Resource limits and quotas
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Future Enhancements -->
-        <div class="section">
-            <h2>🚀 Future Enhancements (Phase 4+)</h2>
-
-            <h3>Advanced Features</h3>
-            <div class="component-grid">
-                <div class="component-card">
-                    <h4>Multi-Modal Learning</h4>
-                    <p>Learn from screenshots, videos, voice feedback</p>
-                </div>
-
-                <div class="component-card">
-                    <h4>Federated Learning</h4>
-                    <p>Share learnings across deployments while preserving privacy</p>
-                </div>
-
-                <div class="component-card">
-                    <h4>Proactive Suggestions</h4>
-                    <p>"This answer might be outdated, review recommended"</p>
-                </div>
-
-                <div class="component-card">
-                    <h4>Auto Content Generation</h4>
-                    <p>Generate draft documentation for knowledge gaps</p>
-                </div>
-
-                <div class="component-card">
-                    <h4>Competitive Analysis</h4>
-                    <p>Compare against other knowledge bases, find gaps</p>
-                </div>
-
-                <div class="component-card">
-                    <h4>Reinforcement Learning</h4>
-                    <p>Continuously optimize based on long-term user success</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Call to Action -->
+        <!-- Next Steps -->
         <div class="section">
             <h2>✅ Next Steps</h2>
 
             <div class="success">
-                <h3>Immediate Actions</h3>
+                <h3>Immediate Actions (Week 1-2)</h3>
                 <ol>
-                    <li><strong>Week 1:</strong> Stakeholder buy-in presentation using this document</li>
-                    <li><strong>Week 2:</strong> Form cross-functional team (2 devs, 1 ML engineer, SME champion)</li>
-                    <li><strong>Week 3:</strong> Set up development environment and tooling</li>
-                    <li><strong>Week 4:</strong> Start Phase 1 implementation (Enhanced Feedback Collection)</li>
+                    <li>Review and approve this technical specification</li>
+                    <li>Form cross-functional team (2 backend devs, 1 frontend dev, 1 ML engineer, SME champion)</li>
+                    <li>Setup development environment and tooling</li>
+                    <li>Create project board with all tasks from implementation plan</li>
+                    <li>Begin Phase 1: Enhanced feedback collection</li>
                 </ol>
             </div>
 
             <div class="highlight-box">
-                <h3>Ready to Build?</h3>
-                <p>This system transforms your RAG from a static tool into a continuously improving, self-service intelligence platform. The feedback you're already collecting becomes your most valuable asset.</p>
-                <p><strong>Investment:</strong> 3 months development time<br>
-                <strong>Return:</strong> 127% ROI in year 1, compound benefits thereafter<br>
-                <strong>Impact:</strong> 10x better responses, 80% less manual work</p>
+                <h3>Decision Points</h3>
+                <p>Key decisions needed before implementation:</p>
+                <ul>
+                    <li><strong>Approach Priority:</strong> Implement all 5 approaches, or focus on #1 + #2 + #5 first?</li>
+                    <li><strong>Golden Dataset Size:</strong> Start with 200 or go for 500 examples?</li>
+                    <li><strong>SME Capacity:</strong> How many hours per week can SMEs dedicate to reviews?</li>
+                    <li><strong>A/B Testing Aggressiveness:</strong> Conservative (20/80 split) or aggressive (50/50)?</li>
+                    <li><strong>Infrastructure Choice:</strong> Cloud vector DB (Pinecone) or self-hosted (Weaviate)?</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <h3>Critical Success Factors</h3>
+                <ul>
+                    <li><strong>SME Buy-in:</strong> Need committed SMEs who see value in the system</li>
+                    <li><strong>Quality Baselines:</strong> Must establish golden dataset before any improvements</li>
+                    <li><strong>Incremental Deployment:</strong> Never skip A/B testing or canary deployment</li>
+                    <li><strong>Monitoring First:</strong> Build dashboards before automation to understand impact</li>
+                    <li><strong>User Trust:</strong> Communicate improvements transparently to build confidence</li>
+                </ul>
             </div>
         </div>
 
@@ -1258,7 +1976,7 @@ CREATE TABLE quality_predictions (
         <div class="section" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
             <h2 style="color: white; border: none;">Questions?</h2>
             <p style="font-size: 1.1em; margin: 20px 0;">This is a living document. The system evolves as it learns.</p>
-            <p><strong>Generated:</strong> October 2025 | <strong>Status:</strong> Proposal</p>
+            <p><strong>Generated:</strong> October 2025 | <strong>Status:</strong> Technical Specification</p>
         </div>
     </div>
 </body>

@@ -34,6 +34,23 @@ export function Chat() {
     reset,
   } = useStreamingChat(serviceType);
 
+  // Restore conversation state from localStorage on mount
+  useEffect(() => {
+    const savedConversationId = localStorage.getItem('current_conversation_id');
+    if (savedConversationId) {
+      loadConversation(savedConversationId);
+    }
+  }, []);
+
+  // Save current conversation ID to localStorage
+  useEffect(() => {
+    if (conversationId) {
+      localStorage.setItem('current_conversation_id', conversationId);
+    } else {
+      localStorage.removeItem('current_conversation_id');
+    }
+  }, [conversationId]);
+
   // Load configurations for AskDocs
   useEffect(() => {
     if (serviceType === 'askdocs') {
@@ -167,6 +184,7 @@ export function Chat() {
   const handleNewChat = () => {
     setMessages([]);
     setConversationId(null);
+    localStorage.removeItem('current_conversation_id');
     reset();
     toast.info('Started new conversation');
   };

@@ -488,13 +488,32 @@ async def submit_message_feedback(
     if not conversation or conversation.user_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    # Create feedback
+    # Convert numeric rating (1-5) to up/down format
+    # 4-5 = up (positive), 1-3 = down (negative)
+    rating_value = "up" if request.rating >= 4 else "down"
+
+    # Create feedback with all required fields
     feedback = Feedback(
         message_id=message_id,
         user_id=current_user.id,
-        rating=request.rating,
-        comment=request.comment
+        conversation_id=conversation.id,
+        rating=rating_value,
+        comment=request.comment,
+        service_type=conversation.service_type,
+        domain_id=None,  # Will be populated if configuration exists
+        configuration_id=conversation.configuration_id,
+        environment=None  # Will be populated if configuration exists
     )
+
+    # If conversation has a configuration, get domain and environment
+    if conversation.configuration_id:
+        from app.models.domain import Configuration
+        stmt = select(Configuration).where(Configuration.id == conversation.configuration_id)
+        result = await db.execute(stmt)
+        config = result.scalar_one_or_none()
+        if config:
+            feedback.domain_id = config.domain_id
+            feedback.environment = config.environment
 
     db.add(feedback)
     await db.commit()

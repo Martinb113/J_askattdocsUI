@@ -98,7 +98,7 @@ export function Chat() {
       // Add assistant message to display
       if (result) {
         const assistantMessage: Message = {
-          id: Date.now().toString(),
+          id: result.messageId || Date.now().toString(), // Use real messageId from backend
           conversation_id: result.conversationId || conversationId || '',
           role: 'assistant',
           content: result.message,

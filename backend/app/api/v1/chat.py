@@ -146,13 +146,16 @@ async def chat_askatt(
                     pass
 
         # Save assistant message
-        await add_message(
+        message = await add_message(
             db=db,
             conversation_id=conversation_id,
             role="assistant",
             content=assistant_message,
             token_usage=usage_data
         )
+
+        # Send message_id to client so feedback can be attached to the real message
+        yield f"data: {json.dumps({'type': 'message_id', 'message_id': str(message.id)})}\n\n"
 
     return StreamingResponse(stream_response(), media_type="text/event-stream")
 
@@ -280,7 +283,7 @@ async def chat_askdocs(
                     pass
 
         # Save assistant message with sources
-        await add_message(
+        message = await add_message(
             db=db,
             conversation_id=conversation_id,
             role="assistant",
@@ -288,6 +291,9 @@ async def chat_askdocs(
             token_usage=usage_data,
             sources=sources_data
         )
+
+        # Send message_id to client so feedback can be attached to the real message
+        yield f"data: {json.dumps({'type': 'message_id', 'message_id': str(message.id)})}\n\n"
 
     return StreamingResponse(stream_response(), media_type="text/event-stream")
 

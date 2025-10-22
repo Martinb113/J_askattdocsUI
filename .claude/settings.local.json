@@ -60,7 +60,8 @@
       "Bash(timeout 5 bash -c 'while ! curl -s http://localhost:8000/health > /dev/null; do sleep 1; done; echo \"\"Backend ready!\"\"')",
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

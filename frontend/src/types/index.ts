@@ -139,6 +139,11 @@ export interface SSEConversationIdEvent {
   conversation_id: string;
 }
 
+export interface SSEMessageIdEvent {
+  type: 'message_id';
+  message_id: string;
+}
+
 export interface SSEEndEvent {
   type: 'end';
 }
@@ -153,6 +158,7 @@ export type SSEEvent =
   | SSESourcesEvent
   | SSEUsageEvent
   | SSEConversationIdEvent
+  | SSEMessageIdEvent
   | SSEEndEvent
   | SSEErrorEvent;
 

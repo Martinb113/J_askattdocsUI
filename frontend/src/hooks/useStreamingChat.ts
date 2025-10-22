@@ -17,6 +17,7 @@ interface StreamingState {
     total_tokens: number;
   } | null;
   conversationId: string | null;
+  messageId: string | null;
   error: string | null;
 }
 
@@ -27,6 +28,7 @@ export function useStreamingChat(serviceType: 'askatt' | 'askdocs') {
     sources: [],
     usage: null,
     conversationId: null,
+    messageId: null,
     error: null,
   });
 
@@ -41,6 +43,7 @@ export function useStreamingChat(serviceType: 'askatt' | 'askdocs') {
         sources: [],
         usage: null,
         conversationId: request.conversation_id || null,
+        messageId: null,
         error: null,
       });
 
@@ -89,6 +92,7 @@ export function useStreamingChat(serviceType: 'askatt' | 'askdocs') {
           total_tokens: number;
         } | null = null;
         let newConversationId = request.conversation_id || null;
+        let newMessageId: string | null = null;
 
         // Buffer for incomplete SSE events across chunks
         let buffer = '';
@@ -160,6 +164,14 @@ export function useStreamingChat(serviceType: 'askatt' | 'askdocs') {
                       }));
                       break;
 
+                    case 'message_id':
+                      newMessageId = event.message_id;
+                      setState((prev) => ({
+                        ...prev,
+                        messageId: newMessageId,
+                      }));
+                      break;
+
                     case 'end':
                       // Stream complete
                       setState((prev) => ({
@@ -190,6 +202,7 @@ export function useStreamingChat(serviceType: 'askatt' | 'askdocs') {
           sources: accumulatedSources,
           usage: accumulatedUsage,
           conversationId: newConversationId,
+          messageId: newMessageId,
         };
       } catch (error: any) {
         if (error.name === 'AbortError') {
@@ -226,6 +239,7 @@ export function useStreamingChat(serviceType: 'askatt' | 'askdocs') {
       sources: [],
       usage: null,
       conversationId: null,
+      messageId: null,
       error: null,
     });
   }, []);

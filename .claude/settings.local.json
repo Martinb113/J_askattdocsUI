@@ -63,7 +63,9 @@
       "Bash(taskkill:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "Bash(tasklist:*)",
+      "Bash(cmd //c:*)"
     ],
     "deny": []
   }

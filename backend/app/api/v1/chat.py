@@ -519,10 +519,13 @@ async def submit_message_feedback(
     await db.commit()
     await db.refresh(feedback)
 
+    # Convert 'up'/'down' back to numeric rating for response
+    response_rating = 5 if feedback.rating == "up" else 1
+
     return FeedbackResponse(
         id=feedback.id,
         message_id=feedback.message_id,
-        rating=feedback.rating,
+        rating=response_rating,
         comment=feedback.comment,
         created_at=feedback.created_at
     )

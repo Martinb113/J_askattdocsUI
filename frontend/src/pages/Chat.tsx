@@ -136,9 +136,9 @@ export function Chat() {
     }
   };
 
-  const handleFeedback = async (messageId: string, rating: number) => {
+  const handleFeedback = async (messageId: string, rating: number, comment?: string) => {
     try {
-      await apiClient.submitFeedback(messageId, { rating });
+      await apiClient.submitFeedback(messageId, { rating, comment });
       toast.success(rating >= 4 ? 'Thanks for the positive feedback!' : 'Thank you for your feedback');
     } catch (error) {
       console.error('Failed to submit feedback:', error);

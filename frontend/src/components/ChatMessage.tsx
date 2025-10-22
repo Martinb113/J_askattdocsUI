@@ -9,11 +9,12 @@ import { toast } from 'sonner';
 import type { Message, Source } from '@/types';
 import { cn } from '@/lib/utils';
 import { SourcePreviewModal } from './SourcePreviewModal';
+import { FeedbackModal } from './FeedbackModal';
 
 interface ChatMessageProps {
   message: Message | { role: 'user' | 'assistant'; content: string; sources?: Source[] };
   isStreaming?: boolean;
-  onFeedback?: (rating: number) => void;
+  onFeedback?: (rating: number, comment?: string) => void;
   onRegenerate?: () => void;
 }
 
@@ -22,6 +23,8 @@ export function ChatMessage({ message, isStreaming = false, onFeedback, onRegene
   const [copied, setCopied] = useState(false);
   const [sourcesExpanded, setSourcesExpanded] = useState(false);
   const [selectedSource, setSelectedSource] = useState<{ source: Source; number: number } | null>(null);
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<'positive' | 'negative' | null>(null);
 
   const handleCopy = async () => {
     try {
@@ -31,6 +34,17 @@ export function ChatMessage({ message, isStreaming = false, onFeedback, onRegene
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       toast.error('Failed to copy');
+    }
+  };
+
+  const handleFeedbackClick = (type: 'positive' | 'negative') => {
+    setFeedbackType(type);
+    setFeedbackModalOpen(true);
+  };
+
+  const handleFeedbackSubmit = (rating: number, comment?: string) => {
+    if (onFeedback) {
+      onFeedback(rating, comment);
     }
   };
 
@@ -157,14 +171,14 @@ export function ChatMessage({ message, isStreaming = false, onFeedback, onRegene
           <div className="mt-3 flex items-center space-x-2">
             <p className="text-xs text-gray-500">Was this helpful?</p>
             <button
-              onClick={() => onFeedback(5)}
+              onClick={() => handleFeedbackClick('positive')}
               className="p-1 text-gray-400 hover:text-green-600 transition-colors"
               title="Helpful"
             >
               <ThumbsUp className="w-4 h-4" />
             </button>
             <button
-              onClick={() => onFeedback(1)}
+              onClick={() => handleFeedbackClick('negative')}
               className="p-1 text-gray-400 hover:text-red-600 transition-colors"
               title="Not helpful"
             >
@@ -188,6 +202,14 @@ export function ChatMessage({ message, isStreaming = false, onFeedback, onRegene
         onClose={() => setSelectedSource(null)}
         source={selectedSource?.source || null}
         sourceNumber={selectedSource?.number}
+      />
+
+      {/* Feedback Modal */}
+      <FeedbackModal
+        isOpen={feedbackModalOpen}
+        onClose={() => setFeedbackModalOpen(false)}
+        onSubmit={handleFeedbackSubmit}
+        feedbackType={feedbackType}
       />
     </div>
   );

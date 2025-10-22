@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@/components/ui/Button';
-import { MessageSquare, Users, LogOut } from 'lucide-react';
+import { MessageSquare, LogOut } from 'lucide-react';
 import { getInitials } from '@/lib/utils';
 
 interface LayoutProps {

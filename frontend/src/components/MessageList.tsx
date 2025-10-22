@@ -3,6 +3,9 @@
  */
 import { useEffect, useRef } from 'react';
 import { ChatMessage } from './ChatMessage';
+import { TypingIndicator } from './TypingIndicator';
+import { EmptyState } from './EmptyState';
+import { MessageSquare } from 'lucide-react';
 import type { Message, Source } from '@/types';
 
 interface MessageListProps {
@@ -27,13 +30,21 @@ export function MessageList({
 
   return (
     <div className="flex-1 overflow-y-auto custom-scrollbar px-4 py-6 space-y-4">
-      {messages.length === 0 && !streamingMessage ? (
-        <div className="h-full flex items-center justify-center text-center">
-          <div>
-            <p className="text-gray-500 text-lg mb-2">No messages yet</p>
-            <p className="text-gray-400 text-sm">Start a conversation by typing a message below</p>
-          </div>
-        </div>
+      {messages.length === 0 && !streamingMessage && !isStreaming ? (
+        <EmptyState
+          icon={MessageSquare}
+          title="No messages yet"
+          description="Start a conversation by typing a message below or try one of these examples"
+          suggestions={[
+            "How do I reset my password?",
+            "What are the current promotions?",
+            "Explain the billing process",
+          ]}
+          onSuggestionClick={(suggestion) => {
+            // This will be handled by parent component
+            console.log('Suggestion clicked:', suggestion);
+          }}
+        />
       ) : (
         <>
           {/* Existing messages */}
@@ -48,6 +59,9 @@ export function MessageList({
               }
             />
           ))}
+
+          {/* Typing indicator (before streaming starts) */}
+          {isStreaming && !streamingMessage && <TypingIndicator />}
 
           {/* Streaming message */}
           {streamingMessage && (

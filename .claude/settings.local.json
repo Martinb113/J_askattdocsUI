@@ -55,7 +55,12 @@
       "Read(//c/Users/admin/Documents/AI_projects/**)",
       "Bash(git check-ignore:*)",
       "Bash(npm run build:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(git checkout:*)",
+      "Bash(timeout 5 bash -c 'while ! curl -s http://localhost:8000/health > /dev/null; do sleep 1; done; echo \"\"Backend ready!\"\"')",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": []
   }

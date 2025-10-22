@@ -11,8 +11,23 @@ class RoleResponse(BaseModel):
     """Role response."""
     id: UUID
     name: str
+    display_name: str
     description: Optional[str] = None
     created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class AdminUserResponse(BaseModel):
+    """Admin user response with full role objects."""
+    id: UUID
+    attid: str
+    email: str
+    full_name: str
+    is_active: bool
+    created_at: datetime
+    roles: list[RoleResponse] = []
 
     class Config:
         from_attributes = True

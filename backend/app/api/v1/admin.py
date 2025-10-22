@@ -10,6 +10,7 @@ from typing import Optional
 from app.api.deps import get_db, get_current_user, require_admin
 from app.schemas.admin import (
     RoleResponse,
+    AdminUserResponse,
     RoleCreateRequest,
     DomainCreateRequest,
     ConfigurationCreateRequest,
@@ -32,7 +33,7 @@ from app.config import settings
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
 
-@router.get("/users", response_model=list[UserResponse])
+@router.get("/users", response_model=list[AdminUserResponse])
 async def list_users(
     limit: int = 100,
     offset: int = 0,
@@ -48,7 +49,7 @@ async def list_users(
     - `offset`: Pagination offset (default 0)
 
     **Returns:**
-    - List of users with roles
+    - List of users with full role objects
     """
     stmt = (
         select(User)
@@ -61,20 +62,29 @@ async def list_users(
     users = result.scalars().all()
 
     return [
-        UserResponse(
+        AdminUserResponse(
             id=user.id,
             attid=user.attid,
             email=user.email,
             full_name=user.display_name,
             is_active=user.is_active,
             created_at=user.created_at,
-            roles=[role.name for role in user.roles]
+            roles=[
+                RoleResponse(
+                    id=role.id,
+                    name=role.name,
+                    display_name=role.display_name,
+                    description=role.description,
+                    created_at=role.created_at
+                )
+                for role in user.roles
+            ]
         )
         for user in users
     ]
 
 
-@router.post("/users/{user_id}/roles", response_model=UserResponse)
+@router.post("/users/{user_id}/roles", response_model=AdminUserResponse)
 async def assign_user_roles(
     user_id: UUID,
     request: UserRoleAssignment,
@@ -89,7 +99,7 @@ async def assign_user_roles(
     - `role_ids`: List of role UUIDs to assign
 
     **Returns:**
-    - Updated user with new roles
+    - Updated user with full role objects
     """
     # Get user
     stmt = select(User).where(User.id == user_id).options(selectinload(User.roles))
@@ -113,14 +123,23 @@ async def assign_user_roles(
     await db.commit()
     await db.refresh(user)
 
-    return UserResponse(
+    return AdminUserResponse(
         id=user.id,
         attid=user.attid,
         email=user.email,
         full_name=user.display_name,
         is_active=user.is_active,
         created_at=user.created_at,
-        roles=[role.name for role in user.roles]
+        roles=[
+            RoleResponse(
+                id=role.id,
+                name=role.name,
+                display_name=role.display_name,
+                description=role.description,
+                created_at=role.created_at
+            )
+            for role in user.roles
+        ]
     )
 
 
@@ -144,6 +163,7 @@ async def list_roles(
         RoleResponse(
             id=role.id,
             name=role.name,
+            display_name=role.display_name,
             description=role.description,
             created_at=role.created_at
         )
@@ -179,6 +199,7 @@ async def create_role(
 
     role = Role(
         name=request.name,
+        display_name=request.name,  # Default to name if not provided
         description=request.description
     )
 
@@ -189,6 +210,7 @@ async def create_role(
     return RoleResponse(
         id=role.id,
         name=role.name,
+        display_name=role.display_name,
         description=role.description,
         created_at=role.created_at
     )

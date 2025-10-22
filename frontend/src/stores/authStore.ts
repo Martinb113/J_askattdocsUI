@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthState>()(
       signup: async (data) => {
         set({ isLoading: true, error: null });
         try {
-          const user = await apiClient.signup(data);
+          await apiClient.signup(data);
 
           // After signup, automatically login
           await get().login({ attid: data.attid, password: data.password });

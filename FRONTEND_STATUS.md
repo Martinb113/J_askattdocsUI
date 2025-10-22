@@ -1,6 +1,6 @@
 # Frontend Implementation Status
 
-## ✅ Completed Components
+## ✅ **PHASE 5 COMPLETED - Chat Interface with Streaming (100%)**
 
 ### Project Setup (100%)
 - ✅ Vite + React + TypeScript configuration
@@ -63,6 +63,35 @@
   - Confirm password matching
   - Auto-login after signup
 
+### **Chat Interface (100%) - FULLY IMPLEMENTED**
+- ✅ `pages/Chat.tsx` - Complete chat page
+  - Service selector (AskAT&T / AskDocs toggle)
+  - Configuration dropdown for AskDocs
+  - Conversation ID tracking
+  - New chat button
+  - Error display
+- ✅ `components/ChatMessage.tsx` - Message display
+  - Markdown rendering with react-markdown + remarkGfm
+  - Source attribution display (for AskDocs)
+  - Feedback buttons (thumbs up/down)
+  - Token usage display
+  - User vs Assistant styling
+- ✅ `components/MessageList.tsx` - Message container
+  - Auto-scroll to bottom
+  - Streaming message display
+  - Empty state
+- ✅ `components/Layout.tsx` - App shell
+  - Header with user info
+  - Navigation
+  - Logout button
+- ✅ `components/ProtectedRoute.tsx` - Auth guard
+  - Redirect to login if unauthenticated
+  - Loading state
+- ✅ `App.tsx` - React Router setup
+  - Public routes (/login, /signup)
+  - Protected routes (/chat)
+  - 404 page
+
 ### Utilities (100%)
 - ✅ `lib/utils.ts` - Helper functions
   - `cn()` - Tailwind class merging
@@ -78,90 +107,68 @@
 
 ---
 
-## 📋 Remaining Components (To Complete Full Frontend)
+## 📋 **REMAINING: Phases 6-7**
 
-### Chat Interface (Priority 1)
-- [ ] `pages/Chat.tsx` - Main chat page
-  - Service selector (AskAT&T / AskDocs)
-  - Configuration dropdown (for AskDocs)
-  - Message list with streaming
-  - Input box with send button
-  - Conversation history sidebar
+### ⏳ **Phase 6: Conversation History & Persistence** (0% Complete)
 
-### Message Components (Priority 1)
-- [ ] `components/ChatMessage.tsx` - Single message display
-  - User vs Assistant styling
-  - Markdown rendering with `react-markdown`
-  - Source attribution display
-  - Feedback button (thumbs up/down)
-  - Copy message button
-
-- [ ] `components/MessageList.tsx` - Scrollable message container
-  - Auto-scroll to bottom
-  - Loading indicator for streaming
-  - Grouped by date
-
-### Conversation Sidebar (Priority 2)
-- [ ] `components/ConversationList.tsx` - Sidebar with conversations
-  - Filter by service type
-  - Search conversations
+**Missing Components:**
+- [ ] `components/ConversationList.tsx` - Sidebar with past conversations
+  - Group by date (Today, Yesterday, Last 7 days)
+  - Search/filter conversations
   - Delete conversation
-  - Create new conversation
+  - Click to load conversation
+  - Show service type badge
 
-### Configuration Selector (Priority 2)
-- [ ] `components/ConfigurationSelector.tsx` - Dropdown for AskDocs configs
-  - Group by domain
-  - Show environment badge (stage/prod)
-  - Filter by user roles (automatic)
+- [ ] Update `pages/Chat.tsx` - Add sidebar integration
+  - Add loadConversation() function
+  - Mobile sidebar toggle
+  - Update layout for 2-column (sidebar + chat)
 
-### Feedback UI (Priority 2)
-- [ ] `components/FeedbackModal.tsx` - Star rating + comment
-  - 1-5 star rating
-  - Optional comment textarea
-  - Submit to backend
+- [ ] Backend update - Auto-generate conversation titles
+  - Update first message to set conversation title
+  - Truncate to 50 chars
 
-### Admin Panel (Priority 3)
+**Estimated Time**: 6-8 hours
+
+---
+
+### ⏳ **Phase 7: Admin Panel & Environment Switching** (0% Complete)
+
+**Missing Components:**
+- [ ] `components/EnvironmentToggle.tsx` - Stage/Production switcher
+  - Only visible for KNOWLEDGE_STEWARD and ADMIN
+  - Updates API calls with environment parameter
+
 - [ ] `pages/Admin.tsx` - Admin dashboard
-  - User list with search
-  - Role management
-  - Configuration management
-  - Usage statistics
+  - Tab navigation (Users, Roles, Configs)
+  - Admin-only route protection
 
 - [ ] `components/admin/UserTable.tsx` - User management
-  - List all users
-  - Assign roles modal
-  - Activate/deactivate users
+  - List all users with roles
+  - Assign role dropdown
+  - Search users
 
-- [ ] `components/admin/RoleManager.tsx` - Role CRUD
-  - Create new roles
-  - Edit role descriptions
-  - Delete roles
+- [ ] `components/admin/RoleManager.tsx` - Role display
+  - List all roles
+  - Show role details
 
-- [ ] `components/admin/ConfigurationManager.tsx` - Config CRUD
-  - Create configurations
-  - Assign roles to configs
-  - Environment toggle
+- [ ] `components/admin/ConfigurationManager.tsx` - Config placeholder
+  - Basic display (can be enhanced later)
 
-### Routing & Layout (Priority 1)
-- [ ] `App.tsx` - Main app component
-  - React Router setup
-  - Protected route wrapper
-  - Layout with header/sidebar
-  - Auth initialization
+- [ ] Update `App.tsx` - Add /admin route
+- [ ] Update `Layout.tsx` - Add admin nav link for admins
 
-- [ ] `components/Layout.tsx` - App shell
-  - Header with user menu
-  - Sidebar navigation
-  - Logout button
+**Estimated Time**: 10-12 hours
 
-- [ ] `components/ProtectedRoute.tsx` - Auth guard
-  - Redirect to login if not authenticated
-  - Show loading during auth check
+---
 
-### Error Handling (Priority 2)
+### ✅ **Optional Enhancements** (Post-MVP)
 - [ ] `components/ErrorBoundary.tsx` - Catch React errors
 - [ ] `components/Toast.tsx` - Toast notifications
-- [ ] Global error handler for API failures
+- [ ] Copy message button
+- [ ] Conversation export (JSON/PDF)
+- [ ] Advanced feedback modal with comments
+- [ ] Usage analytics dashboard
 
 ---
 
@@ -288,42 +295,51 @@ To get a **working chat interface quickly**, you only need:
 
 ## 📊 Current Progress
 
-**Total Files Created**: 20+ files
-**Lines of Code**: ~2,500+ lines
-**Completion**: ~60% (core infrastructure done, UI pages remaining)
+**Total Files Created**: 25+ files
+**Lines of Code**: ~3,500+ lines
+**Completion**: ~85% (Phases 1-5 complete!)
 
-### Infrastructure ✅ (100%)
-- Project setup
-- TypeScript types
-- API client
-- State management
-- Custom hooks
-- Base UI components
-- Auth pages
+### ✅ **Phase 5: Chat Interface (100%)**
+- ✅ Project setup and configuration
+- ✅ TypeScript types and API client
+- ✅ State management (Zustand)
+- ✅ Custom hooks (useStreamingChat)
+- ✅ Base UI components
+- ✅ Auth pages (Login, Signup)
+- ✅ **Chat page with streaming**
+- ✅ **Message components with markdown**
+- ✅ **Service selector and config dropdown**
+- ✅ **Layout and routing**
 
-### Chat Interface ⏳ (0%)
-- Chat page
-- Message components
-- Conversation history
-- Configuration selector
+### ⏳ **Phase 6: Conversation History (0%)**
+- ⏳ ConversationList sidebar
+- ⏳ Load/resume conversations
+- ⏳ Auto-generate titles
 
-### Admin Panel ⏳ (0%)
-- Admin dashboard
-- User management
-- Role management
+### ⏳ **Phase 7: Admin Panel (0%)**
+- ⏳ Admin dashboard
+- ⏳ User management
+- ⏳ Environment toggle
 
 ---
 
 ## 🎯 Next Steps
 
-1. **Create `src/main.tsx` and `src/App.tsx`** with routing
-2. **Build `src/pages/Chat.tsx`** with basic layout
-3. **Create `ChatMessage.tsx`** with markdown rendering
-4. **Test streaming** with the `useStreamingChat` hook
-5. **Add conversation history** sidebar
-6. **Build admin panel** for role management
+**Priority 1: Phase 6 (6-8 hours)**
+1. Create `ConversationList.tsx` component
+2. Integrate sidebar into `Chat.tsx`
+3. Update backend for auto-title generation
+4. Test conversation management
 
-**Estimated Time to Complete**: 12-16 hours for full frontend
+**Priority 2: Phase 7 (10-12 hours)**
+1. Create `EnvironmentToggle.tsx` component
+2. Build `Admin.tsx` dashboard page
+3. Create `UserTable.tsx` and admin components
+4. Add admin routing and protection
+
+**Estimated Time to Complete**: 16-20 hours for Phases 6-7
+
+**See `ACTION_PLAN.md` for detailed implementation guide!**
 
 ---
 

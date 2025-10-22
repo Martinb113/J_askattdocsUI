@@ -55,7 +55,7 @@ class Settings(BaseSettings):
     ASKDOCS_CONFIG_API_PRODUCTION: str
 
     # CORS
-    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
+    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000,http://localhost:3001"
 
     # Optional
     DEBUG: bool = False

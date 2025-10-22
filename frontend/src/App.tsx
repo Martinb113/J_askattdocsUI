@@ -2,16 +2,22 @@
  * Main App component with routing.
  */
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import { Login } from '@/pages/Login';
 import { Signup } from '@/pages/Signup';
 import { Chat } from '@/pages/Chat';
+import { Admin } from '@/pages/Admin';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { Layout } from '@/components/Layout';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <>
+      {/* Toast notifications */}
+      <Toaster position="top-right" richColors closeButton expand={false} />
+
+      <BrowserRouter>
+        <Routes>
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -23,6 +29,17 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <Chat />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Admin />
               </Layout>
             </ProtectedRoute>
           }
@@ -47,7 +64,8 @@ function App() {
           }
         />
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </>
   );
 }
 

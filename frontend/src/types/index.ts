@@ -2,6 +2,13 @@
  * TypeScript types matching the backend API schemas.
  */
 
+export interface Role {
+  id: string;
+  name: string;
+  display_name: string;
+  description?: string;
+}
+
 export interface User {
   id: string;
   attid: string;
@@ -9,7 +16,7 @@ export interface User {
   full_name: string;
   is_active: boolean;
   created_at: string;
-  roles: string[];
+  roles: string[]; // Role names as strings from backend
 }
 
 export interface LoginRequest {
@@ -63,7 +70,7 @@ export interface Conversation {
 export interface ConversationListItem {
   id: string;
   service_type: 'askatt' | 'askdocs';
-  title?: string;
+  title: string;
   configuration_id?: string;
   message_count: number;
   created_at: string;
@@ -150,11 +157,22 @@ export type SSEEvent =
   | SSEErrorEvent;
 
 // Admin types
-export interface Role {
+export interface AdminRole {
   id: string;
   name: string;
+  display_name: string;
   description?: string;
   created_at: string;
+}
+
+export interface AdminUser {
+  id: string;
+  attid: string;
+  email: string;
+  full_name: string;
+  is_active: boolean;
+  created_at: string;
+  roles: AdminRole[]; // Full role objects for admin panel
 }
 
 export interface UserRoleAssignment {

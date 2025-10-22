@@ -12,7 +12,8 @@ import type {
   Configuration,
   FeedbackRequest,
   Feedback,
-  Role,
+  AdminUser,
+  AdminRole,
 } from '@/types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -110,18 +111,18 @@ class ApiClient {
   }
 
   // Admin
-  async getAllUsers(): Promise<User[]> {
-    const response = await this.client.get<User[]>('/api/v1/admin/users');
+  async getAllUsers(): Promise<AdminUser[]> {
+    const response = await this.client.get<AdminUser[]>('/api/v1/admin/users');
     return response.data;
   }
 
-  async getRoles(): Promise<Role[]> {
-    const response = await this.client.get<Role[]>('/api/v1/admin/roles');
+  async getRoles(): Promise<AdminRole[]> {
+    const response = await this.client.get<AdminRole[]>('/api/v1/admin/roles');
     return response.data;
   }
 
-  async assignUserRoles(userId: string, roleIds: string[]): Promise<User> {
-    const response = await this.client.post<User>(`/api/v1/admin/users/${userId}/roles`, {
+  async assignUserRoles(userId: string, roleIds: string[]): Promise<AdminUser> {
+    const response = await this.client.post<AdminUser>(`/api/v1/admin/users/${userId}/roles`, {
       user_id: userId,
       role_ids: roleIds,
     });

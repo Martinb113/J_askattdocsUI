@@ -2,13 +2,15 @@
  * Main chat page with service selector and streaming chat.
  */
 import { useState, useEffect, FormEvent } from 'react';
+import { toast } from 'sonner';
 import { useStreamingChat } from '@/hooks/useStreamingChat';
 import { MessageList } from '@/components/MessageList';
+import { ConversationList } from '@/components/ConversationList';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
-import { Send, StopCircle } from 'lucide-react';
+import { Send, StopCircle, Menu } from 'lucide-react';
 import apiClient from '@/lib/api';
-import type { Message, Configuration, Conversation } from '@/types';
+import type { Message, Configuration } from '@/types';
 
 type ServiceType = 'askatt' | 'askdocs';
 
@@ -19,6 +21,7 @@ export function Chat() {
   const [inputMessage, setInputMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const {
     sendMessage,
@@ -55,6 +58,7 @@ export function Chat() {
       }
     } catch (error) {
       console.error('Failed to load configurations:', error);
+      toast.error('Failed to load configurations');
     }
   };
 
@@ -67,7 +71,7 @@ export function Chat() {
 
     // Validate configuration for AskDocs
     if (serviceType === 'askdocs' && !selectedConfig) {
-      alert('Please select a configuration for AskDocs');
+      toast.error('Please select a configuration for AskDocs');
       return;
     }
 
@@ -114,9 +118,10 @@ export function Chat() {
   const handleFeedback = async (messageId: string, rating: number) => {
     try {
       await apiClient.submitFeedback(messageId, { rating });
-      console.log('Feedback submitted:', rating);
+      toast.success(rating >= 4 ? 'Thanks for the positive feedback!' : 'Thank you for your feedback');
     } catch (error) {
       console.error('Failed to submit feedback:', error);
+      toast.error('Failed to submit feedback');
     }
   };
 
@@ -124,6 +129,23 @@ export function Chat() {
     setMessages([]);
     setConversationId(null);
     reset();
+    toast.info('Started new conversation');
+  };
+
+  const loadConversation = async (conversationId: string) => {
+    try {
+      const conv = await apiClient.getConversation(conversationId);
+      setMessages(conv.messages);
+      setConversationId(conv.id);
+      setServiceType(conv.service_type as ServiceType);
+      if (conv.configuration_id) {
+        setSelectedConfig(conv.configuration_id);
+      }
+      toast.success('Conversation loaded');
+    } catch (error) {
+      console.error('Failed to load conversation:', error);
+      toast.error('Failed to load conversation');
+    }
   };
 
   const handleServiceChange = (service: ServiceType) => {
@@ -135,15 +157,40 @@ export function Chat() {
   };
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col bg-white rounded-lg shadow-sm border border-gray-200">
-      {/* Header */}
-      <div className="border-b border-gray-200 p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold text-gray-900">AI Chat</h1>
-          <Button variant="outline" size="sm" onClick={handleNewChat}>
-            New Chat
-          </Button>
-        </div>
+    <div className="h-[calc(100vh-8rem)] flex bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      {/* Sidebar */}
+      <div
+        className={`${
+          sidebarOpen ? 'w-80' : 'w-0'
+        } transition-all duration-300 overflow-hidden flex-shrink-0`}
+      >
+        <ConversationList
+          onSelectConversation={loadConversation}
+          currentConversationId={conversationId}
+          onNewChat={handleNewChat}
+        />
+      </div>
+
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Header */}
+        <div className="border-b border-gray-200 p-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              {/* Mobile sidebar toggle */}
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
+              >
+                <Menu className="w-5 h-5 text-gray-600" />
+              </button>
+              <h1 className="text-2xl font-bold text-gray-900">AI Chat</h1>
+            </div>
+            <Button variant="outline" size="sm" onClick={handleNewChat}>
+              New Chat
+            </Button>
+          </div>
 
         {/* Service Selector */}
         <div className="flex items-center space-x-4">
@@ -193,9 +240,9 @@ export function Chat() {
             ? 'General AI assistant powered by OpenAI (MOCK mode for local development)'
             : 'Domain-specific knowledge base chat with source attribution (MOCK mode for local development)'}
         </p>
-      </div>
+        </div>
 
-      {/* Messages */}
+        {/* Messages */}
       <MessageList
         messages={messages}
         streamingMessage={
@@ -205,15 +252,15 @@ export function Chat() {
         onFeedback={handleFeedback}
       />
 
-      {/* Error Display */}
-      {error && (
-        <div className="mx-4 mb-2 p-3 bg-red-50 border border-red-200 text-red-800 rounded-lg text-sm">
-          {error}
-        </div>
-      )}
+        {/* Error Display */}
+        {error && (
+          <div className="mx-4 mb-2 p-3 bg-red-50 border border-red-200 text-red-800 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
 
-      {/* Input Area */}
-      <div className="border-t border-gray-200 p-4">
+        {/* Input Area */}
+        <div className="border-t border-gray-200 p-4">
         <form onSubmit={handleSubmit} className="flex items-end space-x-2">
           <div className="flex-1">
             <Textarea
@@ -249,9 +296,10 @@ export function Chat() {
           )}
         </form>
 
-        <p className="mt-2 text-xs text-gray-500">
-          Press Enter to send, Shift+Enter for new line
-        </p>
+          <p className="mt-2 text-xs text-gray-500">
+            Press Enter to send, Shift+Enter for new line
+          </p>
+        </div>
       </div>
     </div>
   );
